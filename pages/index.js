@@ -76,7 +76,7 @@ export default function Home() {
   return (
     <>
       <Head>
-        <title>🅼🅸🆂🆃🅴🆁-🅰🅸-🅻🅸🆅🅴 — Premium Interface</title>
+        <title>𝐌𝐈𝐒𝐓𝐄𝐑-𝐀𝐈-𝐋𝐈𝐕𝐄 — Premium Interface</title>
         <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap" rel="stylesheet" />
         <style>{`
           :root {
@@ -152,7 +152,7 @@ export default function Home() {
         <div className="logo-box">
           <svg viewBox="0 0 24 24" width="30" height="30" fill="#000"><path d="M21 3H3c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h5v2h8v-2h5c1.1 0 1.99-.9 1.99-2L23 5c0-1.1-.9-2-2-2zm0 14H3V5h18v12zm-5-6l-7 4V7l7 4z"/></svg>
         </div>
-        <div className="logo-text">🅼🅸🆂🆃🅴🆁-🅰🅸-🅻🅸🆅🅴</div>
+        <div className="logo-text">𝐌𝐈𝐒𝐓𝐄𝐑-𝐀𝐈-𝐋𝐈𝐕𝐄</div>
       </div>
 
       <div className="container">
