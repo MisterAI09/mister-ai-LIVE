@@ -1,27 +1,22 @@
 import Head from "next/head";
 import { useEffect, useRef, useState } from "react";
 
-/**
- * Responsive "mister-ai-live" UI inspired by the image:
- * - Dark maroon background
- * - Animated teal logo top-right
- * - Large centered player (with play overlay)
- * - Glowing rounded channel buttons below (grid on desktop, horizontal scroller on mobile)
- * - Footer with copyright
- *
- * Place this file in pages/index.js of your Next.js project (mister-ai-LIVE).
- * Ensure your proxy API /api/streams/[...path].js exists so channel URLs like
- * "/api/streams/beinsport1_.m3u8" work.
- */
+/*
+  Modern responsive UI for mister-ai-live
+  - Replace pages/index.js with this file
+  - Ensure /api/streams/[...path].js exists (proxy to your m3u8)
+*/
 
 export default function Home() {
   const videoRef = useRef(null);
   const hlsRef = useRef(null);
+  const starCanvasRef = useRef(null);
+
   const [active, setActive] = useState(null);
   const [muted, setMuted] = useState(false);
   const [error, setError] = useState("");
 
-  // Channels - update titles/urls as you like
+  // Channels: edit titles/urls as needed
   const channels = [
     { id: "1", title: "BeIN Sport 1", url: "/api/streams/beinsport1_.m3u8" },
     { id: "2", title: "BeIN Sport 2", url: "/api/streams/beinsport2_.m3u8" },
@@ -42,33 +37,82 @@ export default function Home() {
     s.onload = () => {};
     s.onerror = () => setError("فشل تحميل مشغل الفيديو (HLS).");
     document.body.appendChild(s);
-    return () => {
-      try { document.body.removeChild(s); } catch {}
-    };
+    return () => { try { document.body.removeChild(s); } catch {} };
   }, []);
 
-  // Play channel using native HLS (Safari) or hls.js
+  // Lightweight starfield for background (mobile-friendly)
+  useEffect(() => {
+    const canvas = starCanvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext("2d");
+    let w = (canvas.width = window.innerWidth);
+    let h = (canvas.height = window.innerHeight);
+    const stars = [];
+    const COUNT = Math.max(40, Math.round((w * h) / 40000)); // adaptive but light
+
+    for (let i = 0; i < COUNT; i++) {
+      stars.push({
+        x: Math.random() * w,
+        y: Math.random() * h,
+        r: Math.random() * 1.5 + 0.3,
+        a: Math.random() * 0.8 + 0.2,
+        dx: (Math.random() - 0.5) * 0.1
+      });
+    }
+
+    function resize() { w = canvas.width = window.innerWidth; h = canvas.height = window.innerHeight; }
+    window.addEventListener("resize", resize);
+
+    let raf;
+    function draw() {
+      ctx.clearRect(0, 0, w, h);
+      // subtle gradient background (maroon tone)
+      const g = ctx.createLinearGradient(0, 0, 0, h);
+      g.addColorStop(0, "#200607");
+      g.addColorStop(1, "#0b0101");
+      ctx.fillStyle = g;
+      ctx.fillRect(0, 0, w, h);
+
+      // draw stars
+      for (let s of stars) {
+        s.x += s.dx;
+        if (s.x < -2) s.x = w + 2;
+        if (s.x > w + 2) s.x = -2;
+        s.a += (Math.random() - 0.5) * 0.02;
+        if (s.a < 0.15) s.a = 0.15;
+        if (s.a > 1) s.a = 1;
+        ctx.beginPath();
+        ctx.fillStyle = `rgba(0,200,255,${s.a * 0.6})`;
+        ctx.shadowBlur = 8;
+        ctx.shadowColor = "rgba(0,160,255,0.6)";
+        ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.closePath();
+        ctx.shadowBlur = 0;
+      }
+      raf = requestAnimationFrame(draw);
+    }
+    raf = requestAnimationFrame(draw);
+    return () => { cancelAnimationFrame(raf); window.removeEventListener("resize", resize); };
+  }, []);
+
+  // Play channel: native or hls.js
   function playChannel(ch) {
     setError("");
     setActive(ch.id);
     const video = videoRef.current;
     if (!video) return;
 
-    // Native HLS (Safari)
     if (video.canPlayType("application/vnd.apple.mpegurl")) {
       try { if (hlsRef.current) { hlsRef.current.destroy(); hlsRef.current = null; } } catch {}
       video.src = ch.url;
-      video.load();
       video.muted = muted;
-      video.play().catch(()=>{});
+      video.play().catch(()=> {});
       return;
     }
 
     const Hls = window.Hls;
-    if (!Hls) {
-      setError("المشغل غير محمل، حاول مرة أخرى بعد ثوانٍ.");
-      return;
-    }
+    if (!Hls) { setError("جاري تحميل مشغل الفيديو — أعد المحاولة بعد قليل"); return; }
 
     if (hlsRef.current) {
       try { hlsRef.current.destroy(); } catch {}
@@ -82,234 +126,228 @@ export default function Home() {
       hls.attachMedia(video);
       hls.on(Hls.Events.MANIFEST_PARSED, () => {
         video.muted = muted;
-        video.play().catch(()=>{});
+        video.play().catch(()=> {});
       });
       hls.on(Hls.Events.ERROR, (_, data) => {
         console.error("HLS error", data);
-        if (data && data.type === "networkError") setError("فشل جلب البث — مشكلة في الشبكة أو المصدر.");
+        if (data && data.type === "networkError") setError("فشل جلب البث — تحقق من المصدر أو الشبكة.");
       });
     } else {
-      setError("متصفحك لا يدعم تشغيل HLS.");
+      setError("متصفحك لا يدعم HLS.");
     }
   }
 
-  function handleOverlayPlay() {
-    // If no active, play first channel
+  function overlayPlay() {
+    // play active or first
     const ch = active ? channels.find(c => c.id === active) : channels[0];
     if (ch) playChannel(ch);
   }
 
   function toggleMute() {
-    const v = videoRef.current;
-    if (!v) return;
-    v.muted = !v.muted;
-    setMuted(v.muted);
+    const v = videoRef.current; if (!v) return;
+    v.muted = !v.muted; setMuted(v.muted);
   }
 
-  // Clean up HLS on unmount
+  // Clean HLS on unmount
   useEffect(() => {
-    return () => {
-      try { if (hlsRef.current) hlsRef.current.destroy(); } catch {}
-    };
+    return () => { try { if (hlsRef.current) hlsRef.current.destroy(); } catch {} };
   }, []);
 
   return (
     <>
       <Head>
-        <title>mister-ai-live</title>
+        <title>mister-ai-live — بث مباشر</title>
         <meta name="viewport" content="width=device-width,initial-scale=1" />
         <meta charSet="utf-8" />
         <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap" rel="stylesheet" />
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@^3/dist/tailwind.min.css" />
         <style>{`
           :root{
-            --bg:#210606; /* dark maroon */
-            --teal:#00e0d6;
-            --teal-2:#00c6ff;
-            --button-bg: rgba(0,200,255,0.08);
-            --button-inner: rgba(0,200,255,0.14);
+            --bg-dark: #1b0304;
+            --teal: #00d9cf;
+            --teal-2: #00afff;
+            --accent-bg: rgba(0,200,255,0.08);
           }
-          html,body,#__next { height: 100%; }
-          body{
-            margin:0;
-            font-family: 'Cairo', sans-serif;
-            background: radial-gradient(circle at 20% 10%, rgba(255,255,255,0.02), transparent 8%), var(--bg);
-            color: #e8eef6;
-            -webkit-font-smoothing:antialiased;
-            -moz-osx-font-smoothing:grayscale;
-          }
+          html,body,#__next{height:100%}
+          body{ margin:0; font-family:'Cairo',sans-serif; -webkit-font-smoothing:antialiased; background:transparent; color:#e7f6f9; }
 
-          /* top-right animated logo */
-          .logo-wrap { position: absolute; top: 22px; right: 26px; z-index: 40; display:flex; align-items:center; gap:10px; }
-          .tv-icon {
-            width: 56px; height: 56px; display:inline-grid; place-items:center;
+          /* Top-right animated logo */
+          .logo-top {
+            position: fixed; top: 20px; right: 24px; z-index:60; display:flex; align-items:center; gap:10px;
+            pointer-events: none;
+          }
+          .logo-top .tv {
+            pointer-events:auto;
+            width:56px; height:56px; border-radius:10px;
+            display:grid; place-items:center;
             background: linear-gradient(135deg, var(--teal), var(--teal-2));
-            border-radius: 10px; box-shadow: 0 8px 30px rgba(0,200,255,0.12);
+            box-shadow: 0 12px 40px rgba(0,180,220,0.14);
             transform: rotate(-6deg);
           }
-          .logo-text {
-            font-weight:900; color: var(--teal); letter-spacing: .06em;
+          .logo-top .text {
+            font-weight:900; font-size:14px;
             background: linear-gradient(90deg, var(--teal), var(--teal-2));
-            -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent;
-            animation: glowLogo 6s linear infinite;
-            font-size: 14px;
+            -webkit-background-clip:text; color:transparent;
+            animation: pulseLogo 6s ease-in-out infinite;
           }
-          @keyframes glowLogo { 0%{ filter: drop-shadow(0 0 6px rgba(0,200,255,0.12)); } 50%{ filter: drop-shadow(0 0 18px rgba(0,200,255,0.22)); } 100%{ filter: drop-shadow(0 0 6px rgba(0,200,255,0.12)); } }
+          @keyframes pulseLogo {
+            0% { filter: drop-shadow(0 0 6px rgba(0,200,255,0.08)); transform: scale(1) rotate(-6deg); }
+            50% { filter: drop-shadow(0 0 18px rgba(0,200,255,0.18)); transform: scale(1.02) rotate(-6.5deg); }
+            100% { filter: drop-shadow(0 0 6px rgba(0,200,255,0.08)); transform: scale(1) rotate(-6deg); }
+          }
 
-          /* center player frame */
-          .screen-wrap {
-            width: 100%;
-            max-width: 980px;
-            margin: 28px auto 12px;
-            border-radius: 18px;
-            padding: 12px;
+          /* central container */
+          .container {
+            position: relative;
+            max-width: 1100px;
+            margin: 90px auto 40px;
+            padding: 20px;
+            border-radius: 20px;
+            background: rgba(0,0,0,0.3);
+            box-shadow: 0 40px 100px rgba(0,0,0,0.7);
+            border: 1px solid rgba(255,255,255,0.02);
+          }
+
+          /* "laptop" frame */
+          .laptop-frame {
+            border-radius: 14px;
+            padding: 10px;
             background: linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.003));
-            box-shadow: 0 30px 80px rgba(0,0,0,0.6), inset 0 0 40px rgba(0,160,220,0.02);
-            border: 1px solid rgba(0,200,255,0.06);
+            border: 1px solid rgba(255,255,255,0.02);
+            box-shadow: inset 0 0 40px rgba(0,160,240,0.02);
           }
-
-          .player {
+          .laptop-top {
+            height: calc(min(60vh, 520px));
             background: #000;
             border-radius: 12px;
-            overflow: hidden;
             position: relative;
-            height: clamp(220px, 46vh, 560px);
+            overflow: hidden;
+          }
+          .laptop-bottom {
+            height: 22px; margin-top: 12px; border-radius: 8px;
+            background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+            box-shadow: 0 6px 20px rgba(0,0,0,0.6) inset;
+            display:flex; align-items:center; justify-content:center;
+            color: rgba(255,255,255,0.35);
+            font-weight:700;
           }
 
+          /* play overlay */
           .play-overlay {
-            position: absolute;
-            inset: 0;
-            display:flex;
-            align-items:center;
-            justify-content:center;
-            z-index: 10;
-            cursor: pointer;
-            transition: opacity .18s;
+            position:absolute; inset:0; display:flex; align-items:center; justify-content:center; z-index:30;
+            cursor:pointer;
+            transition: opacity .16s;
           }
-          .play-btn {
-            width: 84px; height: 84px; border-radius: 999px;
-            background: rgba(0,0,0,0.6);
-            display:grid; place-items:center;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.6), 0 0 30px rgba(0,200,255,0.12);
+          .play-circle {
+            width:88px; height:88px; border-radius:999px; display:grid; place-items:center;
+            background: linear-gradient(180deg, rgba(0,0,0,0.6), rgba(0,0,0,0.45));
             border: 2px solid rgba(0,200,255,0.12);
+            box-shadow: 0 28px 60px rgba(0,200,255,0.08);
           }
-          .play-btn svg { width: 38px; height: 38px; fill: var(--teal); transform: translateX(3px); }
+          .play-triangle { width:38px; height:38px; fill: var(--teal); transform: translateX(4px); }
 
-          /* channel buttons grid */
-          .channels-grid {
-            display: grid;
+          /* channels grid */
+          .channels {
+            margin-top: 18px;
+            display:grid;
             grid-template-columns: repeat(5, minmax(0,1fr));
             gap: 14px;
-            margin-top: 18px;
+            align-items:stretch;
           }
-          .ch-btn {
+          .ch {
             border-radius: 14px;
             padding: 12px 10px;
-            background: linear-gradient(180deg, var(--button-inner), rgba(0,0,0,0.08));
-            border: 1px solid rgba(0,200,255,0.09);
-            box-shadow: 0 8px 30px rgba(0,200,255,0.04), 0 6px 18px rgba(0,0,0,0.5);
-            color: #e9fbff;
-            font-weight: 800;
             text-align:center;
-            cursor: pointer;
+            background: linear-gradient(180deg, rgba(0,200,255,0.06), rgba(0,0,0,0.08));
+            border: 1px solid rgba(0,200,255,0.09);
+            box-shadow: 0 10px 30px rgba(0,200,255,0.03);
             transition: transform .12s, box-shadow .12s, background .12s;
+            cursor:pointer;
+            font-weight:800;
           }
-          .ch-btn:hover { transform: translateY(-6px); box-shadow: 0 22px 60px rgba(0,200,255,0.10); }
-          .ch-active {
-            background: linear-gradient(180deg, rgba(0,230,210,0.12), rgba(0,200,255,0.06));
-            border-color: rgba(0,255,210,0.22);
-            box-shadow: 0 28px 80px rgba(0,200,255,0.14);
+          .ch:hover { transform: translateY(-6px); box-shadow: 0 28px 80px rgba(0,200,255,0.08); }
+          .ch.active {
+            background: linear-gradient(180deg, rgba(0,230,210,0.14), rgba(0,200,255,0.06));
             color: #001217;
+            border-color: rgba(0,255,210,0.18);
+            box-shadow: 0 32px 100px rgba(0,200,255,0.12);
           }
 
-          /* responsive for smaller screens */
+          /* responsive */
           @media (max-width: 1000px) {
-            .channels-grid { grid-template-columns: repeat(4, minmax(0,1fr)); gap:12px; }
-            .logo-wrap { right: 16px; top: 16px; }
+            .channels { grid-template-columns: repeat(4, minmax(0,1fr)); }
+            .container { margin-top: 70px; padding: 16px; }
           }
           @media (max-width: 720px) {
-            .channels-grid { display: flex; gap: 12px; overflow-x: auto; padding-bottom: 8px; }
-            .ch-btn { min-width: 140px; flex: 0 0 auto; }
-            .logo-wrap { right: 12px; top: 12px; }
-            .screen-wrap { margin-top: 12px; padding: 10px; }
+            .channels { display:flex; gap:12px; overflow-x:auto; padding-bottom:8px; }
+            .ch { min-width: 140px; flex:0 0 auto; }
+            .container { margin-top: 60px; }
           }
 
           /* footer */
-          .site-footer { margin-top: 28px; text-align:center; color: #9fb8bf; font-size: 12px; opacity: 0.9; }
+          .footer { margin-top: 18px; text-align:center; color:#9fb8bf; font-size:13px; }
         `}</style>
       </Head>
 
-      <div style={{ position: "relative", minHeight: "100vh" }}>
-        {/* Animated logo top-right */}
-        <div className="logo-wrap" aria-hidden>
-          <div className="tv-icon" role="img" aria-label="tv">
-            <svg viewBox="0 0 24 24" fill="none" style={{ width: 34, height: 34 }}>
-              <rect x="2" y="3" width="20" height="14" rx="2" fill="white" opacity="0.06"></rect>
-              <path d="M7 9l5 3-5 3V9z" fill="#001217" opacity="0.96"></path>
-            </svg>
-          </div>
-          <div className="logo-text">MISTER-AI-LIVE</div>
-        </div>
+      {/* background star canvas (full screen) */}
+      <canvas ref={starCanvasRef} style={{ position: "fixed", inset: 0, zIndex: 0, pointerEvents: "none" }} />
 
-        <main dir="rtl" className="flex flex-col items-center pt-14 pb-12 px-4">
-          {/* centered player */}
-          <div className="screen-wrap w-full">
-            <div className="player">
+      {/* top-right logo */}
+      <div className="logo-top" aria-hidden>
+        <div className="tv" title="Mister AI Live logo" role="img">
+          <svg viewBox="0 0 24 24" width="36" height="36" xmlns="http://www.w3.org/2000/svg">
+            <rect x="1.5" y="4" width="21" height="14" rx="2.2" fill="rgba(255,255,255,0.08)"/>
+            <path d="M7 9l5 3-5 3V9z" fill="#001217"/>
+          </svg>
+        </div>
+        <div className="text">MISTER-AI-LIVE</div>
+      </div>
+
+      {/* main */}
+      <main style={{ position: "relative", zIndex: 10 }}>
+        <div className="container" role="main" aria-label="Mister AI Live container">
+          <div className="laptop-frame">
+            <div className="laptop-top" role="region" aria-label="Video player area">
               <video
                 ref={videoRef}
                 id="tvPlayer"
                 controls
                 playsInline
-                className="w-full h-full object-cover"
-                style={{ background: "#000" }}
+                style={{ width: "100%", height: "100%", objectFit: "cover", background: "#000" }}
+                aria-label="مشغل الفيديو"
               />
-              {/* overlay play button (click to start first/active channel) */}
-              <div className="play-overlay" onClick={handleOverlayPlay} aria-hidden>
-                <div className="play-btn" title="تشغيل">
-                  <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M5 3v18l15-9L5 3z" />
-                  </svg>
+              <div className="play-overlay" onClick={overlayPlay} aria-hidden>
+                <div className="play-circle" title="تشغيل">
+                  <svg className="play-triangle" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M5 3v18l15-9L5 3z"/></svg>
                 </div>
               </div>
             </div>
 
-            {/* below player controls */}
-            <div className="flex items-center justify-between mt-3 px-2">
-              <div className="text-sm text-gray-300">{active ? `قناة ${active} قيد التشغيل` : "اضغط زر التشغيل أو اختر قناة"}</div>
-              <div className="flex items-center gap-2">
-                <button onClick={() => { const ch = channels.find(c => c.id === active); if (ch) playChannel(ch); }} className="px-3 py-1 rounded-lg bg-white/6 text-sm">إعادة تشغيل</button>
-                <button onClick={toggleMute} className="px-3 py-1 rounded-lg bg-white/6 text-sm">{muted ? "إلغاء كتم" : "كتم"}</button>
-              </div>
-            </div>
+            <div className="laptop-bottom">MISTER-AI-LIVE · بث مباشر</div>
           </div>
 
-          {/* channels buttons (grid desktop, scroll mobile) */}
-          <div className="w-full max-w-[980px] mt-6">
-            <div className="channels-grid">
-              {channels.map((ch) => (
-                <button
-                  key={ch.id}
-                  onClick={() => playChannel(ch)}
-                  className={`ch-btn ${active === ch.id ? "ch-active" : ""}`}
-                  aria-pressed={active === ch.id}
-                  title={ch.title}
-                >
-                  <div style={{ fontSize: 14 }}>{ch.title}</div>
-                  <div style={{ fontSize: 11, opacity: 0.85, marginTop: 6 }}>قناة {ch.id}</div>
-                </button>
-              ))}
-            </div>
+          {/* channel buttons */}
+          <div className="channels" role="list" aria-label="قنوات">
+            {channels.map((ch) => (
+              <button
+                key={ch.id}
+                className={`ch ${active === ch.id ? "active" : ""}`}
+                onClick={() => playChannel(ch)}
+                aria-pressed={active === ch.id}
+                role="listitem"
+                title={ch.title}
+              >
+                <div style={{ fontSize: 14 }}>{ch.title}</div>
+                <div style={{ fontSize: 12, opacity: 0.85, marginTop: 6 }}>قناة {ch.id}</div>
+              </button>
+            ))}
           </div>
 
-          {/* optional error message */}
-          {error && <div className="mt-4 text-sm text-yellow-300">{error}</div>}
+          {error && <div style={{ marginTop: 12, color: "#ffd580", textAlign: "center" }}>{error}</div>}
 
-          {/* footer */}
-          <footer className="site-footer">
-            © 2026 MISTERAI LIVE — جميع الحقوق محفوظة — MisterAI_Security
-          </footer>
-        </main>
-      </div>
+          <div className="footer">© 2026 MISTERAI LIVE — جميع الحقوق محفوظة — MisterAI_Security</div>
+        </div>
+      </main>
     </>
   );
 }
