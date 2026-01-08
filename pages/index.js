@@ -8,6 +8,7 @@ export default function Home() {
   const [muted, setMuted] = useState(false);
   const [error, setError] = useState("");
   const [search, setSearch] = useState("");
+  const [fullscreen, setFullscreen] = useState(false);
 
   // القنوات الأصلية كما كانت في المشروع
   const channels = [
@@ -148,6 +149,50 @@ export default function Home() {
     v.muted = !v.muted;
     setMuted(v.muted);
   }
+
+  // دالة التكبير الكامل للشاشة
+  function toggleFullscreen() {
+    const videoContainer = document.querySelector('.video-container');
+    
+    if (!document.fullscreenElement) {
+      // دخول وضع الشاشة الكاملة
+      if (videoContainer.requestFullscreen) {
+        videoContainer.requestFullscreen();
+      } else if (videoContainer.webkitRequestFullscreen) { // Safari
+        videoContainer.webkitRequestFullscreen();
+      } else if (videoContainer.msRequestFullscreen) { // IE11
+        videoContainer.msRequestFullscreen();
+      }
+      setFullscreen(true);
+    } else {
+      // الخروج من وضع الشاشة الكاملة
+      if (document.exitFullscreen) {
+        document.exitFullscreen();
+      } else if (document.webkitExitFullscreen) { // Safari
+        document.webkitExitFullscreen();
+      } else if (document.msExitFullscreen) { // IE11
+        document.msExitFullscreen();
+      }
+      setFullscreen(false);
+    }
+  }
+
+  // مراقبة تغييرات وضع الشاشة الكاملة
+  useEffect(() => {
+    const handleFullscreenChange = () => {
+      setFullscreen(!!document.fullscreenElement);
+    };
+
+    document.addEventListener('fullscreenchange', handleFullscreenChange);
+    document.addEventListener('webkitfullscreenchange', handleFullscreenChange);
+    document.addEventListener('msfullscreenchange', handleFullscreenChange);
+
+    return () => {
+      document.removeEventListener('fullscreenchange', handleFullscreenChange);
+      document.removeEventListener('webkitfullscreenchange', handleFullscreenChange);
+      document.removeEventListener('msfullscreenchange', handleFullscreenChange);
+    };
+  }, []);
 
   // تنظيف HLS عند إغلاق الصفحة
   useEffect(() => {
@@ -294,18 +339,43 @@ export default function Home() {
             }
           }
 
+          /* Video Container - قابل للتكبير */
           .video-container {
             background: var(--bg-card);
             border-radius: 20px;
             overflow: hidden;
             border: 1px solid rgba(255, 255, 255, 0.05);
             box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+            transition: all 0.3s ease;
+            position: relative;
+          }
+
+          /* وضع الشاشة الكاملة */
+          .video-container:fullscreen {
+            background: #000;
+            border-radius: 0;
+            border: none;
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+          }
+
+          .video-container:fullscreen .video-wrapper {
+            padding-top: 0;
+            flex: 1;
+            height: calc(100vh - 120px);
+          }
+
+          .video-container:fullscreen .video-info,
+          .video-container:fullscreen .controls {
+            background: rgba(0, 0, 0, 0.8);
           }
 
           .video-wrapper {
             position: relative;
             width: 100%;
-            padding-top: 56.25%;
+            padding-top: 56.25%; /* نسبة 16:9 */
             background: #000;
           }
 
@@ -316,6 +386,11 @@ export default function Home() {
             width: 100%;
             height: 100%;
             object-fit: contain;
+          }
+
+          /* في وضع الشاشة الكاملة */
+          .video-container:fullscreen .video-wrapper video {
+            object-fit: cover;
           }
 
           .video-overlay {
@@ -331,6 +406,7 @@ export default function Home() {
             cursor: pointer;
             opacity: 0;
             transition: opacity 0.3s;
+            z-index: 10;
           }
 
           .video-wrapper:hover .video-overlay {
@@ -364,13 +440,16 @@ export default function Home() {
           .video-info {
             padding: 20px;
             border-top: 1px solid rgba(255, 255, 255, 0.05);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
           }
 
           .channel-name-display {
             font-size: 22px;
             font-weight: 700;
             color: var(--primary);
-            margin-bottom: 10px;
+            margin-bottom: 0;
           }
 
           .channel-status {
@@ -422,6 +501,17 @@ export default function Home() {
           .control-button svg {
             width: 16px;
             height: 16px;
+          }
+
+          .control-button.fullscreen {
+            background: linear-gradient(45deg, var(--primary), var(--primary-dark));
+            color: #001217;
+            font-weight: 700;
+          }
+
+          .control-button.fullscreen:hover {
+            background: linear-gradient(45deg, var(--primary-dark), var(--primary));
+            transform: translateY(-2px) scale(1.05);
           }
 
           /* Channels Panel */
@@ -566,6 +656,28 @@ export default function Home() {
             font-size: 14px;
           }
 
+          /* Fullscreen Instructions */
+          .fullscreen-hint {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            background: rgba(0, 0, 0, 0.7);
+            color: var(--primary);
+            padding: 8px 15px;
+            border-radius: 10px;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            z-index: 5;
+            opacity: 0.8;
+            transition: opacity 0.3s;
+          }
+
+          .fullscreen-hint:hover {
+            opacity: 1;
+          }
+
           /* Footer */
           .footer {
             text-align: center;
@@ -630,6 +742,12 @@ export default function Home() {
               flex: 1;
               min-width: 120px;
             }
+
+            .video-info {
+              flex-direction: column;
+              gap: 10px;
+              align-items: flex-start;
+            }
           }
 
           @media (max-width: 480px) {
@@ -645,6 +763,61 @@ export default function Home() {
               width: 40px;
               height: 40px;
             }
+
+            .control-button {
+              padding: 10px 15px;
+              font-size: 13px;
+            }
+          }
+
+          /* Keyboard Shortcut Hint */
+          .keyboard-hint {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(0, 0, 0, 0.7);
+            color: var(--text-secondary);
+            padding: 6px 12px;
+            border-radius: 8px;
+            font-size: 11px;
+            z-index: 5;
+            opacity: 0.7;
+            transition: opacity 0.3s;
+          }
+
+          .keyboard-hint:hover {
+            opacity: 1;
+          }
+
+          /* Zoom Controls for Touch Devices */
+          .zoom-controls {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            display: flex;
+            gap: 10px;
+            z-index: 5;
+          }
+
+          .zoom-button {
+            width: 40px;
+            height: 40px;
+            background: rgba(0, 0, 0, 0.7);
+            border: 1px solid var(--primary);
+            border-radius: 50%;
+            color: var(--primary);
+            font-size: 20px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s;
+          }
+
+          .zoom-button:hover {
+            background: rgba(0, 224, 214, 0.2);
+            transform: scale(1.1);
           }
         `}</style>
       </Head>
@@ -661,7 +834,7 @@ export default function Home() {
           </div>
           <div>
             <div className="logo-text">MISTER-AI-LIVE</div>
-            <div className="logo-subtext">نظام البث المباشر المتطور</div>
+            <div className="logo-subtext">نظام البث المباشر - شاشة كاملة متاحة</div>
           </div>
         </div>
         <div className="live-indicator">
@@ -675,6 +848,10 @@ export default function Home() {
         <div className="player-section">
           {/* Video Player */}
           <div className="video-container">
+            <div className="keyboard-hint">
+              F11 للشاشة الكاملة
+            </div>
+            
             <div className="video-wrapper">
               <video 
                 ref={videoRef} 
@@ -690,15 +867,27 @@ export default function Home() {
                   </svg>
                 </div>
               </div>
+              
+              <div className="zoom-controls">
+                <button className="zoom-button" onClick={() => {
+                  const video = videoRef.current;
+                  if (video) video.style.objectFit = video.style.objectFit === 'cover' ? 'contain' : 'cover';
+                }}>
+                  🔍
+                </button>
+              </div>
             </div>
 
             <div className="video-info">
-              <div className="channel-name-display">
-                {active ? channels.find(c => c.id === active)?.title : "اختر قناة للبدأ"}
-              </div>
-              <div className="channel-status">
-                <div className="status-dot"></div>
-                <span>{active ? "جاري التشغيل" : "في انتظار اختيار قناة"}</span>
+              <div>
+                <div className="channel-name-display">
+                  {active ? channels.find(c => c.id === active)?.title : "اختر قناة للبدأ"}
+                </div>
+                <div className="channel-status">
+                  <div className="status-dot"></div>
+                  <span>{active ? "جاري التشغيل" : "في انتظار اختيار قناة"}</span>
+                  {fullscreen && <span> • وضع الشاشة الكاملة</span>}
+                </div>
               </div>
             </div>
 
@@ -730,7 +919,34 @@ export default function Home() {
                   </>
                 )}
               </button>
+
+              <button className="control-button fullscreen" onClick={toggleFullscreen}>
+                {fullscreen ? (
+                  <>
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                      <path d="M5 16h3v3h2v-5H5v2zm3-8H5v2h5V5H8v3zm6 11h2v-3h3v-2h-5v5zm2-11V5h-2v5h5V8h-3z"/>
+                    </svg>
+                    خروج من الشاشة الكاملة
+                  </>
+                ) : (
+                  <>
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                      <path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"/>
+                    </svg>
+                    شاشة كاملة
+                  </>
+                )}
+              </button>
             </div>
+
+            {!fullscreen && (
+              <div className="fullscreen-hint" onClick={toggleFullscreen}>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"/>
+                </svg>
+                انقر للتكبير
+              </div>
+            )}
           </div>
 
           {/* Channels Panel */}
@@ -790,6 +1006,8 @@ export default function Home() {
         <div className="footer-logo">MISTER-AI-LIVE</div>
         <div className="footer-text">
           © 2026 MISTERAI LIVE — جميع الحقوق محفوظة — نظام حماية متطور
+          <br />
+          <small>استخدم زر الشاشة الكاملة أو F11 للتكبير</small>
         </div>
       </footer>
     </>
