@@ -8,7 +8,7 @@ export default function Home() {
   const [muted, setMuted] = useState(false);
   const [error, setError] = useState("");
 
-  // القنوات كما هي في كودك تماماً دون حذف أي حرف
+  // مصفوفة القنوات الأصلية الخاصة بك (بدون أي تعديل)
   const channels = [
     { id: "1", title: "|CAN|AR beIN SPORTS Max 1 ❹Ⓚ", url: "http://fr.ottv.pro/live/4476647188407159/4476647188407159/432904.m3u8" },
     { id: "2", title: "|CAN|AR beIN SPORTS Max 1 ⒻⒽⒹ", url: "http://fr.ottv.pro/live/4476647188407159/4476647188407159/432903.m3u8" },
@@ -60,7 +60,7 @@ export default function Home() {
     { id: "48", title: "Rakuten_TV_Top_Movies_Italy_(1080p)", url: "https://54045f0c40fd442c8b06df076aaf1e85.mediatailor.eu-west-1.amazonaws.com/v1/master/0547f18649bd788bec7b67b746e47670f558b6b2/production-LiveChannel-6065/master.m3u8" }
   ];
 
-  // --- آلية التشغيل الأصلية (لا تلمس) ---
+  // دالة التشغيل الأصلية كما هي تماماً لضمان السرعة
   useEffect(() => {
     const s = document.createElement("script");
     s.src = "https://cdn.jsdelivr.net/npm/hls.js@1.4.4/dist/hls.min.js";
@@ -114,43 +114,51 @@ export default function Home() {
   return (
     <>
       <Head>
-        <title>𝐌𝐈𝐒𝐓𝐄𝐑-𝐀𝐈-𝐋𝐈𝐕𝐄 | Premium Interface</title>
+        <title>𝐌𝐈𝐒𝐓𝐄𝐑-𝐀𝐈-𝐋𝐈𝐕𝐄 — Premium Interface</title>
         <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap" rel="stylesheet" />
         <style>{`
-          :root { --accent: #00f2ea; --bg: #050505; --glass: rgba(255,255,255,0.03); }
-          body { margin:0; font-family: 'Cairo', sans-serif; background: var(--bg); color:#fff; overflow-x: hidden; }
+          :root { --bg: #0b0202; --accent: #00e0d6; --accent-glow: rgba(0, 224, 214, 0.4); }
+          body { margin:0; font-family: 'Cairo', sans-serif; background: var(--bg); color:#fff; background-image: radial-gradient(circle at 50% -20%, #300a0a, transparent); }
           
-          .header { padding: 25px; display: flex; align-items: center; justify-content: center; gap: 15px; background: rgba(0,0,0,0.4); backdrop-filter: blur(10px); border-bottom: 1px solid rgba(255,255,255,0.1); }
-          .logo-box { width: 50px; height: 50px; background: linear-gradient(135deg, var(--accent), #0077ff); border-radius: 12px; display: grid; place-items: center; box-shadow: 0 0 20px rgba(0,242,234,0.3); animation: float 3s infinite ease-in-out; }
-          @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-5px); } }
-          .logo-text { font-weight: 900; font-size: 24px; color: #fff; text-shadow: 0 0 10px var(--accent); }
+          /* اللوجو المتحرك */
+          .logo-container { position: fixed; top: 20px; right: 20px; z-index: 50; display: flex; align-items: center; gap: 12px; }
+          .logo-box { width: 50px; height: 50px; background: linear-gradient(135deg, #00e0d6, #0077ff); border-radius: 12px; display: grid; place-items: center; animation: float 3s infinite ease-in-out; box-shadow: 0 0 20px var(--accent-glow); }
+          @keyframes float { 0%, 100% { transform: translateY(0) rotate(-5deg); } 50% { transform: translateY(-5px) rotate(5deg); } }
+          .logo-text { font-weight: 900; font-size: 18px; color: #fff; text-shadow: 0 0 10px rgba(0,224,214,0.5); }
 
-          .container { max-width: 1200px; margin: 0 auto; padding: 30px 15px; display: flex; flex-direction: column; align-items: center; }
+          .container { min-height: 100vh; display: flex; flex-direction: column; align-items: center; padding: 40px 20px; }
 
-          /* Glowy Video Frame */
-          .player-card { width: 100%; max-width: 900px; background: #000; border-radius: 24px; padding: 12px; border: 1px solid rgba(255,255,255,0.1); box-shadow: 0 20px 50px rgba(0,0,0,0.8); position: relative; }
-          .screen { aspect-ratio: 16/9; border-radius: 15px; overflow: hidden; background: #000; }
+          /* إطار الفيديو */
+          .laptop-mockup { width: 100%; max-width: 900px; background: #1a1a1a; border: 8px solid #333; border-radius: 20px 20px 0 0; position: relative; box-shadow: 0 50px 100px rgba(0,0,0,0.8); }
+          .screen-content { aspect-ratio: 16/9; background: #000; position: relative; overflow: hidden; }
+          .laptop-bottom { width: 105%; height: 12px; background: linear-gradient(to bottom, #444, #222); border-radius: 0 0 20px 20px; margin-bottom: 30px; position: relative; left: -2.5%; }
 
-          /* Glossy Channel Buttons */
-          .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 12px; width: 100%; margin-top: 40px; }
-          .btn { background: var(--glass); border: 1px solid rgba(255,255,255,0.1); padding: 18px 10px; border-radius: 16px; cursor: pointer; transition: 0.3s; color: #aaa; font-weight: 700; font-size: 13px; position: relative; overflow: hidden; }
+          /* شبكة القنوات (Glossy Effect) */
+          .channels-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 15px; width: 100%; max-width: 900px; margin-top: 20px; }
+          .channel-btn { 
+             background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); 
+             padding: 15px; border-radius: 15px; cursor: pointer; transition: 0.3s; color: #ccc; 
+             font-weight: 700; position: relative; overflow: hidden;
+          }
+          /* تأثير الوميض الزجاجي عند المرور */
+          .channel-btn::after {
+            content: ''; position: absolute; top: -50%; left: -100%; width: 50%; height: 200%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+            transform: rotate(25deg); transition: 0.5s;
+          }
+          .channel-btn:hover::after { left: 150%; }
+          .channel-btn:hover { background: rgba(0, 224, 214, 0.1); border-color: var(--accent); transform: translateY(-3px); color: #fff; }
+          .channel-btn.active { background: var(--accent); color: #000; border-color: var(--accent); box-shadow: 0 0 20px var(--accent-glow); }
+
+          .controls-bar { display: flex; gap: 15px; margin-top: 25px; width: 100%; max-width: 900px; justify-content: center; }
+          .action-btn { padding: 10px 25px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.2); background: rgba(255,255,255,0.05); color: #fff; cursor: pointer; font-weight: bold; transition: 0.2s; }
+          .action-btn:hover { background: #fff; color: #000; }
           
-          /* اللمعة الزجاجية */
-          .btn::after { content: ''; position: absolute; top: -50%; left: -100%; width: 50%; height: 200%; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent); transform: rotate(30deg); transition: 0.5s; }
-          .btn:hover { border-color: var(--accent); color: #fff; transform: translateY(-3px); background: rgba(0, 242, 234, 0.05); }
-          .btn:hover::after { left: 150%; }
-          
-          .btn.active { background: var(--accent); color: #000; border: none; box-shadow: 0 0 25px var(--accent); }
-
-          .controls { display: flex; gap: 12px; margin: 25px 0; }
-          .action { padding: 10px 25px; border-radius: 30px; border: 1px solid #333; background: #111; color: #fff; cursor: pointer; font-weight: bold; transition: 0.2s; }
-          .action:hover { background: #fff; color: #000; }
-          
-          .footer { margin-top: 50px; opacity: 0.3; font-size: 11px; letter-spacing: 2px; }
+          .footer-note { margin-top: 40px; font-size: 12px; opacity: 0.4; letter-spacing: 2px; text-transform: uppercase; }
         `}</style>
       </Head>
 
-      <div className="header">
+      <div className="logo-container">
         <div className="logo-box">
           <svg viewBox="0 0 24 24" width="30" height="30" fill="#000"><path d="M21 3H3c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h5v2h8v-2h5c1.1 0 1.99-.9 1.99-2L23 5c0-1.1-.9-2-2-2zm0 14H3V5h18v12zm-5-6l-7 4V7l7 4z"/></svg>
         </div>
@@ -158,38 +166,39 @@ export default function Home() {
       </div>
 
       <div className="container">
-        <div className="player-card">
-          <div className="screen">
+        <div className="laptop-mockup">
+          <div className="screen-content">
             <video ref={videoRef} controls playsInline style={{ width:"100%", height:"100%" }} />
             {!active && (
-              <div style={{position:"absolute", inset:0, display:"flex", alignItems:"center", justifyContent:"center", background:"rgba(0,0,0,0.85)"}}>
-                <button onClick={() => playChannel(channels[18])} className="action" style={{background: 'var(--accent)', color: '#000', border:'none', scale:'1.2'}}>تشغيل beIN SPORTS 1</button>
+              <div style={{position:"absolute", inset:0, display:"flex", alignItems:"center", justifyContent:"center", background:"rgba(0,0,0,0.8)"}}>
+                <button onClick={() => playChannel(channels[18])} className="action-btn" style={{background: 'var(--accent)', color: '#000', border:'none'}}>ابدأ البث (beIN 1)</button>
               </div>
             )}
           </div>
         </div>
+        <div className="laptop-bottom"></div>
 
-        <div className="controls">
-          <button className="action" onClick={() => { if(active) playChannel(channels.find(c => c.id === active)) }}>🔄 تحديث</button>
-          <button className="action" onClick={toggleMute}>{muted ? "🔈 تشغيل الصوت" : "🔇 كتم الصوت"}</button>
-          <a href="https://x.com/neurosisnet" target="_blank" rel="noreferrer" className="action" style={{textDecoration:'none'}}>حساب X</a>
-        </div>
-
-        <div className="grid">
+        <div className="channels-grid">
           {channels.map((ch) => (
             <button
               key={ch.id}
-              className={`btn ${active === ch.id ? "active" : ""}`}
+              className={`channel-btn ${active === ch.id ? "active" : ""}`}
               onClick={() => playChannel(ch)}
             >
-              {ch.title}
+              <div>{ch.title}</div>
             </button>
           ))}
         </div>
 
+        <div className="controls-bar">
+          <button className="action-btn" onClick={() => { if(active) playChannel(channels.find(c => c.id === active)) }}>إعادة تحميل البث</button>
+          <button className="action-btn" onClick={toggleMute}>{muted ? "🔈 تشغيل الصوت" : "🔇 كتم الصوت"}</button>
+          <a href="https://x.com/neurosisnet" target="_blank" rel="noreferrer" className="action-btn" style={{textDecoration:'none', textAlign:'center'}}>حساب X</a>
+        </div>
+
         {error && <div style={{color:"#ff4b4b", marginTop:20, fontWeight:"bold"}}>{error}</div>}
-        
-        <div className="footer">DESIGN BY MUSTAPHA — 2026 PREMIUM</div>
+
+        <div className="footer-note">Design by MUSTAPHA — 2026 Premium</div>
       </div>
     </>
   );
