@@ -11,52 +11,244 @@ export default function Home() {
   const [fullscreen, setFullscreen] = useState(false);
   const [showAllChannels, setShowAllChannels] = useState(false);
 
-  // 🔥 القنوات المباشرة (بدون بروكسي) - تعمل مباشرة
-  const directChannels = [
-    // قنوات رياضية مباشرة
-    { id: "sports1", title: "⚽ beIN Sports 1 (Direct)", category: "sports", quality: "HD", lang: "ar", direct: true, url: "https://bitdash-a.akamaihd.net/s/content/media/renditions/_livesim_/live_2000_400.m3u8" },
-    { id: "sports2", title: "⚽ beIN Sports 2 (Direct)", category: "sports", quality: "HD", lang: "ar", direct: true, url: "https://mnmedias.api.telequebec.tv/m3u8/29880.m3u8" },
-    
-    // قنوات جزائرية مباشرة
-    { id: "dz1", title: "🇩🇿 ALG 24 News (Direct)", category: "national", quality: "HD", lang: "ar", direct: true, url: "https://cdnamd-hls-globecast.akamaized.net/live/ramdisk/algerie_4/hls_snrt/index.m3u8" },
-    { id: "dz2", title: "🇩🇿 Canal Algérie (Direct)", category: "national", quality: "HD", lang: "ar", direct: true, url: "https://cdnamd-hls-globecast.akamaized.net/live/ramdisk/canal_algerie/hls_snrt/index.m3u8" },
-    
-    // قنوات أفلام مباشرة
-    { id: "movie1", title: "🎬 Movies Action (Direct)", category: "movies", quality: "FHD", lang: "en", direct: true, url: "https://d2zihajmogu5jn.cloudfront.net/bipbop-advanced/bipbop_16x9_variant.m3u8" },
-    { id: "movie2", title: "🎬 Movies Comedy (Direct)", category: "movies", quality: "HD", lang: "en", direct: true, url: "https://content.uplynk.com/channel/3324f2467c414329b3b0cc5cd987b6be.m3u8" },
-    
-    // قنوات اختبار MP4 (تعمل دائماً)
-    { id: "test1", title: "📺 Test Channel 1 (MP4)", category: "test", quality: "HD", lang: "en", direct: true, url: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" },
-    { id: "test2", title: "📺 Test Channel 2 (MP4)", category: "test", quality: "HD", lang: "en", direct: true, url: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4" },
+  // 🔥 قنوات خارجية تفتح في صفحة جديدة (بدون بروكسي)
+  const externalChannels = [
+    // قنوات رياضية خارجية (تفتح في نافذة جديدة)
+    { 
+      id: "external1", 
+      title: "⚽ beIN Sports 1 (External)", 
+      category: "sports", 
+      quality: "HD", 
+      lang: "ar", 
+      type: "external",
+      externalUrl: "https://live.hibridsports.com/bein-sports-1-arabic-live-stream/",
+      color: "#FF6B35"
+    },
+    { 
+      id: "external2", 
+      title: "⚽ beIN Sports 2 (External)", 
+      category: "sports", 
+      quality: "HD", 
+      lang: "ar", 
+      type: "external",
+      externalUrl: "https://live.hibridsports.com/bein-sports-2-arabic-live-stream/",
+      color: "#00A8E8"
+    },
+    { 
+      id: "external3", 
+      title: "⚽ beIN Sports 3 (External)", 
+      category: "sports", 
+      quality: "HD", 
+      lang: "en", 
+      type: "external",
+      externalUrl: "https://live.hibridsports.com/bein-sports-3-english-live-stream/",
+      color: "#6A0572"
+    },
+    { 
+      id: "external4", 
+      title: "⚽ beIN Sports 4 (External)", 
+      category: "sports", 
+      quality: "HD", 
+      lang: "fr", 
+      type: "external",
+      externalUrl: "https://live.hibridsports.com/bein-sports-4-french-live-stream/",
+      color: "#FFD166"
+    },
+
+    // قنوات جزائرية خارجية (تفتح في نافذة جديدة)
+    { 
+      id: "external5", 
+      title: "🇩🇿 Canal Algérie (External)", 
+      category: "national", 
+      quality: "HD", 
+      lang: "ar", 
+      type: "external",
+      externalUrl: "https://www.algeriainfo.com/canal-algerie-en-direct/",
+      color: "#006400"
+    },
+    { 
+      id: "external6", 
+      title: "🇩🇿 Algerie 24 (External)", 
+      category: "national", 
+      quality: "HD", 
+      lang: "ar", 
+      type: "external",
+      externalUrl: "https://www.algeriainfo.com/algerie-24-en-direct/",
+      color: "#8B0000"
+    },
+    { 
+      id: "external7", 
+      title: "🇩🇿 El Bilad TV (External)", 
+      category: "national", 
+      quality: "HD", 
+      lang: "ar", 
+      type: "external",
+      externalUrl: "https://www.elbilad.net/live",
+      color: "#4682B4"
+    },
+    { 
+      id: "external8", 
+      title: "🇩🇿 A3 Algerie (External)", 
+      category: "national", 
+      quality: "HD", 
+      lang: "ar", 
+      type: "external",
+      externalUrl: "https://www.a3algerie.com/live",
+      color: "#800080"
+    },
+
+    // قنوات أفلام خارجية
+    { 
+      id: "external9", 
+      title: "🎬 Rakuten Movies (External)", 
+      category: "movies", 
+      quality: "FHD", 
+      lang: "en", 
+      type: "external",
+      externalUrl: "https://rakuten.tv/live",
+      color: "#FF1493"
+    },
+    { 
+      id: "external10", 
+      title: "🎬 Pluto TV (External)", 
+      category: "movies", 
+      quality: "HD", 
+      lang: "en", 
+      type: "external",
+      externalUrl: "https://pluto.tv/live-tv",
+      color: "#00CED1"
+    },
   ];
 
-  // 🔥 القنوات عبر بروكسي (النظام الأصلي)
-  const proxyChannels = [
-    { id: "proxy1", title: "BeIN Sport 1 (Proxy)", category: "sports", quality: "HD", lang: "ar", direct: false },
-    { id: "proxy2", title: "BeIN Sport 2 (Proxy)", category: "sports", quality: "HD", lang: "ar", direct: false },
-    { id: "proxy3", title: "BeIN Sport 3 (Proxy)", category: "sports", quality: "HD", lang: "ar", direct: false },
-    { id: "proxy4", title: "BeIN Sport 4 (Proxy)", category: "sports", quality: "HD", lang: "ar", direct: false },
-    { id: "proxy5", title: "BeIN Sport 5 (Proxy)", category: "sports", quality: "HD", lang: "ar", direct: false },
-    { id: "proxy6", title: "BeIN Sport 6 (Proxy)", category: "sports", quality: "HD", lang: "ar", direct: false },
-    { id: "proxy7", title: "BeIN Sport 7 (Proxy)", category: "sports", quality: "HD", lang: "ar", direct: false },
-    { id: "proxy8", title: "BeIN Sport 8 (Proxy)", category: "sports", quality: "HD", lang: "ar", direct: false },
-    { id: "proxy9", title: "BeIN Sport 9 (Proxy)", category: "sports", quality: "HD", lang: "ar", direct: false },
+  // 🔥 قنوات مباشرة تعمل داخل الموقع (بدون بروكسي)
+  const directChannels = [
+    // قنوات اختبار داخلية (MP4 - تعمل دائماً)
+    { 
+      id: "test1", 
+      title: "📺 Test Channel 1 (MP4)", 
+      category: "test", 
+      quality: "HD", 
+      lang: "en", 
+      type: "direct",
+      url: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
+      color: "#00FF88"
+    },
+    { 
+      id: "test2", 
+      title: "📺 Test Channel 2 (MP4)", 
+      category: "test", 
+      quality: "HD", 
+      lang: "en", 
+      type: "direct",
+      url: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4",
+      color: "#FFAA00"
+    },
+    // قنوات HLS داخلية
+    { 
+      id: "direct1", 
+      title: "📡 HLS Test 1", 
+      category: "test", 
+      quality: "HD", 
+      lang: "en", 
+      type: "direct",
+      url: "https://bitdash-a.akamaihd.net/s/content/media/renditions/_livesim_/live_2000_400.m3u8",
+      color: "#4169E1"
+    },
   ];
+
+  // 🔥 قنوات تعمل عبر البروكسي (النظام الأصلي)
+  const proxyChannels = [
+    { 
+      id: "proxy1", 
+      title: "🛡️ BeIN Sport 1 (Proxy)", 
+      category: "sports", 
+      quality: "HD", 
+      lang: "ar", 
+      type: "proxy" 
+    },
+    { 
+      id: "proxy2", 
+      title: "🛡️ BeIN Sport 2 (Proxy)", 
+      category: "sports", 
+      quality: "HD", 
+      lang: "ar", 
+      type: "proxy" 
+    },
+    { 
+      id: "proxy3", 
+      title: "🛡️ BeIN Sport 3 (Proxy)", 
+      category: "sports", 
+      quality: "HD", 
+      lang: "ar", 
+      type: "proxy" 
+    },
+    { 
+      id: "proxy4", 
+      title: "🛡️ BeIN Sport 4 (Proxy)", 
+      category: "sports", 
+      quality: "HD", 
+      lang: "ar", 
+      type: "proxy" 
+    },
+    { 
+      id: "proxy5", 
+      title: "🛡️ BeIN Sport 5 (Proxy)", 
+      category: "sports", 
+      quality: "HD", 
+      lang: "ar", 
+      type: "proxy" 
+    },
+    { 
+      id: "proxy6", 
+      title: "🛡️ BeIN Sport 6 (Proxy)", 
+      category: "sports", 
+      quality: "HD", 
+      lang: "ar", 
+      type: "proxy" 
+    },
+    { 
+      id: "proxy7", 
+      title: "🛡️ BeIN Sport 7 (Proxy)", 
+      category: "sports", 
+      quality: "HD", 
+      lang: "ar", 
+      type: "proxy" 
+    },
+    { 
+      id: "proxy8", 
+      title: "🛡️ BeIN Sport 8 (Proxy)", 
+      category: "sports", 
+      quality: "HD", 
+      lang: "ar", 
+      type: "proxy" 
+    },
+    { 
+      id: "proxy9", 
+      title: "🛡️ BeIN Sport 9 (Proxy)", 
+      category: "sports", 
+      quality: "HD", 
+      lang: "ar", 
+      type: "proxy" 
+    },
+  ];
+
+  // جميع القنوات معاً
+  const allChannels = [...externalChannels, ...directChannels, ...proxyChannels];
 
   // دالة الحصول على رابط القناة
   const getChannelUrl = (channel) => {
-    if (channel.direct) {
-      // القنوات المباشرة
-      return channel.url;
-    } else {
-      // القنوات عبر بروكسي (النظام الأصلي)
-      const channelNum = channel.id.replace('proxy', '');
-      return `/api/streams/beinsport${channelNum}_.m3u8`;
+    switch(channel.type) {
+      case "direct":
+        return channel.url;
+      case "proxy":
+        const channelNum = channel.id.replace('proxy', '');
+        return `/api/streams/beinsport${channelNum}_.m3u8`;
+      case "external":
+        return "#"; // للقنوات الخارجية، لن نستخدمها داخلياً
+      default:
+        return "";
     }
   };
-
-  // جميع القنوات معاً
-  const allChannels = [...directChannels, ...proxyChannels];
 
   // التصنيفات
   const categories = [
@@ -78,9 +270,6 @@ export default function Home() {
     return matchesSearch && matchesCategory;
   });
 
-  // عرض القنوات (مباشرة فقط أو كلها)
-  const displayedChannels = showAllChannels ? filteredChannels : filteredChannels.filter(ch => ch.direct);
-
   // تحميل HLS.js ديناميكياً
   useEffect(() => {
     const s = document.createElement("script");
@@ -94,6 +283,12 @@ export default function Home() {
 
   // دالة تشغيل القناة
   async function playChannel(ch) {
+    if (ch.type === "external") {
+      // القنوات الخارجية تفتح في نافذة جديدة
+      window.open(ch.externalUrl, '_blank', 'noopener,noreferrer,width=1200,height=700');
+      return;
+    }
+
     setError("");
     setActive(ch.id);
     const video = videoRef.current;
@@ -114,7 +309,7 @@ export default function Home() {
       }
 
       const streamUrl = getChannelUrl(ch);
-      console.log(`Playing: ${ch.title} - URL: ${streamUrl} - Direct: ${ch.direct}`);
+      console.log(`Playing: ${ch.title} - Type: ${ch.type} - URL: ${streamUrl}`);
 
       // إعداد الفيديو
       video.src = streamUrl;
@@ -132,7 +327,6 @@ export default function Home() {
       }
 
       // إذا كان m3u8، استخدم HLS.js أو التشغيل الأصلي
-      // Safari يدعم HLS أصلياً
       if (video.canPlayType('application/vnd.apple.mpegurl')) {
         try {
           await video.play();
@@ -141,7 +335,6 @@ export default function Home() {
           setError("خطأ في تشغيل البث. حاول قناة أخرى.");
         }
       } 
-      // للمتصفحات الأخرى، استخدم HLS.js
       else if (window.Hls) {
         if (window.Hls.isSupported()) {
           const hls = new window.Hls({
@@ -167,7 +360,7 @@ export default function Home() {
           hls.on(window.Hls.Events.ERROR, (event, data) => {
             console.error("HLS error:", data);
             if (data.fatal) {
-              setError(`خطأ في البث (${ch.direct ? 'Direct' : 'Proxy'}). حاول قناة أخرى.`);
+              setError(`خطأ في البث (${ch.type}). حاول قناة أخرى.`);
             }
           });
         } else {
@@ -179,6 +372,13 @@ export default function Home() {
     } catch (error) {
       console.error("Error playing channel:", error);
       setError("خطأ غير متوقع. حاول مرة أخرى.");
+    }
+  }
+
+  // دالة فتح القناة الخارجية
+  function openExternalChannel(ch) {
+    if (ch.externalUrl) {
+      window.open(ch.externalUrl, '_blank', 'noopener,noreferrer,width=1200,height=700');
     }
   }
 
@@ -252,7 +452,7 @@ export default function Home() {
   return (
     <>
       <Head>
-        <title>MISTER-AI-LIVE — البث المباشر المزدوج</title>
+        <title>MISTER-AI-LIVE — نظام البث المتعدد</title>
         <meta name="viewport" content="width=device-width,initial-scale=1" />
         <meta charSet="utf-8" />
         <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;800&display=swap" rel="stylesheet" />
@@ -263,8 +463,9 @@ export default function Home() {
             --primary: #00e0d6;
             --primary-dark: #00b4a9;
             --accent: #ff2a6d;
-            --success: #00ff88;
-            --warning: #ffaa00;
+            --external: #FF6B35;
+            --direct: #00FF88;
+            --proxy: #FFAA00;
             --text: #ffffff;
             --text-secondary: #b0b8d0;
           }
@@ -286,22 +487,24 @@ export default function Home() {
           body {
             background: 
               radial-gradient(circle at 20% 30%, rgba(0, 224, 214, 0.1) 0%, transparent 50%),
-              radial-gradient(circle at 80% 70%, rgba(255, 42, 109, 0.05) 0%, transparent 50%),
+              radial-gradient(circle at 80% 70%, rgba(255, 107, 53, 0.05) 0%, transparent 50%),
+              radial-gradient(circle at 40% 60%, rgba(0, 255, 136, 0.05) 0%, transparent 50%),
               linear-gradient(180deg, #0a0a1a 0%, #151530 100%);
           }
 
           /* Header */
           .header {
             padding: 20px 40px;
-            background: rgba(10, 10, 26, 0.9);
-            backdrop-filter: blur(10px);
-            border-bottom: 1px solid rgba(0, 224, 214, 0.1);
+            background: rgba(10, 10, 26, 0.95);
+            backdrop-filter: blur(15px);
+            border-bottom: 1px solid rgba(0, 224, 214, 0.15);
             display: flex;
             justify-content: space-between;
             align-items: center;
             position: sticky;
             top: 0;
             z-index: 1000;
+            box-shadow: 0 5px 30px rgba(0, 0, 0, 0.5);
           }
 
           .logo-container {
@@ -311,92 +514,109 @@ export default function Home() {
           }
 
           .logo-icon {
-            width: 50px;
-            height: 50px;
-            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-            border-radius: 12px;
+            width: 55px;
+            height: 55px;
+            background: linear-gradient(135deg, var(--primary), var(--external), var(--direct));
+            border-radius: 15px;
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 4px 20px rgba(0, 224, 214, 0.3);
-            animation: rotate 10s linear infinite;
+            box-shadow: 0 0 30px rgba(0, 224, 214, 0.4);
+            animation: glow 3s ease-in-out infinite alternate;
           }
 
-          @keyframes rotate {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+          @keyframes glow {
+            from { box-shadow: 0 0 20px rgba(0, 224, 214, 0.4); }
+            to { box-shadow: 0 0 40px rgba(255, 107, 53, 0.6); }
           }
 
           .logo-text {
-            font-size: 24px;
-            font-weight: 800;
-            background: linear-gradient(45deg, var(--primary), var(--accent));
+            font-size: 26px;
+            font-weight: 900;
+            background: linear-gradient(45deg, var(--primary), var(--external), var(--accent));
             -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
+            text-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
           }
 
           .logo-subtext {
-            font-size: 12px;
+            font-size: 13px;
             color: var(--text-secondary);
-            margin-top: -3px;
+            margin-top: -2px;
+            letter-spacing: 0.5px;
           }
 
           .system-status {
             display: flex;
-            gap: 15px;
+            gap: 12px;
             align-items: center;
           }
 
           .status-badge {
-            padding: 8px 16px;
-            border-radius: 20px;
-            font-weight: 700;
+            padding: 10px 18px;
+            border-radius: 25px;
+            font-weight: 800;
             font-size: 14px;
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 10px;
+            transition: all 0.3s;
+            cursor: pointer;
+            border: 2px solid transparent;
+          }
+
+          .status-badge:hover {
+            transform: translateY(-3px);
+          }
+
+          .status-external {
+            background: linear-gradient(45deg, var(--external), #FF8C42);
+            color: #001217;
+            border-color: rgba(255, 107, 53, 0.3);
           }
 
           .status-direct {
-            background: linear-gradient(45deg, var(--success), #00cc6d);
+            background: linear-gradient(45deg, var(--direct), #00CC6D);
             color: #001217;
+            border-color: rgba(0, 255, 136, 0.3);
           }
 
           .status-proxy {
-            background: linear-gradient(45deg, var(--warning), #ff9900);
+            background: linear-gradient(45deg, var(--proxy), #FF9900);
             color: #001217;
+            border-color: rgba(255, 170, 0, 0.3);
           }
 
           .status-dot {
-            width: 8px;
-            height: 8px;
+            width: 10px;
+            height: 10px;
             background: currentColor;
             border-radius: 50%;
-            animation: pulse 2s infinite;
+            animation: pulse 1.5s infinite;
           }
 
           @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.5; }
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.7; transform: scale(1.1); }
           }
 
           /* Main Container */
           .container {
-            max-width: 1600px;
+            max-width: 1700px;
             margin: 0 auto;
-            padding: 30px 20px;
+            padding: 35px 25px;
           }
 
           /* Video Player Section */
           .player-section {
             display: grid;
-            grid-template-columns: 2fr 1fr;
-            gap: 30px;
-            margin-bottom: 30px;
+            grid-template-columns: 2.2fr 1fr;
+            gap: 35px;
+            margin-bottom: 40px;
           }
 
-          @media (max-width: 1024px) {
+          @media (max-width: 1200px) {
             .player-section {
               grid-template-columns: 1fr;
             }
@@ -405,11 +625,11 @@ export default function Home() {
           /* Video Container */
           .video-container {
             background: var(--bg-card);
-            border-radius: 20px;
+            border-radius: 25px;
             overflow: hidden;
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
-            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 25px 70px rgba(0, 0, 0, 0.6);
+            transition: all 0.4s ease;
             position: relative;
           }
 
@@ -426,14 +646,14 @@ export default function Home() {
           .video-container:fullscreen .video-wrapper {
             padding-top: 0;
             flex: 1;
-            height: calc(100vh - 120px);
+            height: calc(100vh - 130px);
           }
 
           .video-wrapper {
             position: relative;
             width: 100%;
             padding-top: 56.25%;
-            background: #000;
+            background: linear-gradient(45deg, #000, #111);
           }
 
           .video-wrapper video {
@@ -455,7 +675,7 @@ export default function Home() {
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.5);
+            background: rgba(0, 0, 0, 0.4);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -470,35 +690,38 @@ export default function Home() {
           }
 
           .play-button {
-            width: 70px;
-            height: 70px;
-            background: rgba(0, 0, 0, 0.7);
+            width: 80px;
+            height: 80px;
+            background: rgba(0, 0, 0, 0.8);
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            border: 2px solid var(--primary);
+            border: 3px solid var(--primary);
             transition: all 0.3s;
+            backdrop-filter: blur(10px);
           }
 
           .play-button:hover {
-            transform: scale(1.1);
-            background: rgba(0, 224, 214, 0.2);
+            transform: scale(1.15);
+            background: rgba(0, 224, 214, 0.3);
+            box-shadow: 0 0 40px rgba(0, 224, 214, 0.5);
           }
 
           .play-button svg {
-            width: 25px;
-            height: 25px;
+            width: 30px;
+            height: 30px;
             fill: var(--primary);
-            margin-left: 3px;
+            margin-left: 5px;
           }
 
           .video-info {
-            padding: 20px;
-            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            padding: 25px;
+            border-top: 1px solid rgba(255, 255, 255, 0.06);
             display: flex;
             justify-content: space-between;
             align-items: center;
+            background: rgba(0, 0, 0, 0.2);
           }
 
           .channel-info-left {
@@ -506,464 +729,640 @@ export default function Home() {
           }
 
           .channel-name-display {
-            font-size: 22px;
-            font-weight: 700;
+            font-size: 24px;
+            font-weight: 800;
             color: var(--primary);
-            margin-bottom: 5px;
+            margin-bottom: 8px;
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 12px;
           }
 
           .channel-meta {
             display: flex;
             align-items: center;
-            gap: 15px;
+            gap: 20px;
             color: var(--text-secondary);
-            font-size: 14px;
+            font-size: 15px;
           }
 
           .channel-type-badge {
-            padding: 4px 12px;
-            border-radius: 15px;
-            font-size: 12px;
-            font-weight: 700;
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 800;
+            letter-spacing: 0.5px;
+            border: 2px solid;
+            transition: all 0.3s;
+          }
+
+          .channel-type-badge:hover {
+            transform: scale(1.05);
+          }
+
+          .channel-external {
+            background: linear-gradient(45deg, rgba(255, 107, 53, 0.2), rgba(255, 140, 66, 0.1));
+            color: var(--external);
+            border-color: var(--external);
           }
 
           .channel-direct {
-            background: rgba(0, 255, 136, 0.2);
-            color: var(--success);
-            border: 1px solid var(--success);
+            background: linear-gradient(45deg, rgba(0, 255, 136, 0.2), rgba(0, 204, 109, 0.1));
+            color: var(--direct);
+            border-color: var(--direct);
           }
 
           .channel-proxy {
-            background: rgba(255, 170, 0, 0.2);
-            color: var(--warning);
-            border: 1px solid var(--warning);
+            background: linear-gradient(45deg, rgba(255, 170, 0, 0.2), rgba(255, 153, 0, 0.1));
+            color: var(--proxy);
+            border-color: var(--proxy);
           }
 
           .status-dot-active {
-            width: 8px;
-            height: 8px;
-            background: var(--success);
+            width: 12px;
+            height: 12px;
             border-radius: 50%;
-            animation: pulse 2s infinite;
+            animation: pulse 1.5s infinite;
+          }
+
+          .status-external-dot {
+            background: var(--external);
+            box-shadow: 0 0 15px var(--external);
+          }
+
+          .status-direct-dot {
+            background: var(--direct);
+            box-shadow: 0 0 15px var(--direct);
+          }
+
+          .status-proxy-dot {
+            background: var(--proxy);
+            box-shadow: 0 0 15px var(--proxy);
           }
 
           /* Controls */
           .controls {
             display: flex;
-            gap: 10px;
-            padding: 20px;
-            background: rgba(0, 0, 0, 0.2);
-            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            gap: 12px;
+            padding: 25px;
+            background: rgba(0, 0, 0, 0.25);
+            border-top: 1px solid rgba(255, 255, 255, 0.06);
           }
 
           .control-button {
-            padding: 12px 24px;
+            padding: 14px 28px;
             border: none;
-            border-radius: 10px;
-            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.07);
             color: var(--text);
             font-family: 'Cairo', sans-serif;
-            font-weight: 600;
+            font-weight: 700;
             cursor: pointer;
             transition: all 0.3s;
             display: flex;
             align-items: center;
-            gap: 8px;
-            font-size: 14px;
+            gap: 10px;
+            font-size: 15px;
+            letter-spacing: 0.5px;
           }
 
           .control-button:hover {
-            background: rgba(0, 224, 214, 0.1);
-            transform: translateY(-2px);
+            background: rgba(0, 224, 214, 0.15);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(0, 224, 214, 0.2);
           }
 
           .control-button svg {
-            width: 16px;
-            height: 16px;
+            width: 18px;
+            height: 18px;
           }
 
           .control-button.fullscreen {
             background: linear-gradient(45deg, var(--primary), var(--primary-dark));
             color: #001217;
-            font-weight: 700;
+            font-weight: 800;
           }
 
           .control-button.fullscreen:hover {
             background: linear-gradient(45deg, var(--primary-dark), var(--primary));
-            transform: translateY(-2px) scale(1.05);
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 15px 30px rgba(0, 224, 214, 0.3);
+          }
+
+          .control-button.external {
+            background: linear-gradient(45deg, var(--external), #FF8C42);
+            color: #001217;
+            font-weight: 800;
+            animation: externalGlow 2s infinite alternate;
+          }
+
+          @keyframes externalGlow {
+            from { box-shadow: 0 0 15px rgba(255, 107, 53, 0.5); }
+            to { box-shadow: 0 0 25px rgba(255, 107, 53, 0.8); }
+          }
+
+          .control-button.external:hover {
+            background: linear-gradient(45deg, #FF8C42, var(--external));
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 15px 35px rgba(255, 107, 53, 0.6);
           }
 
           /* Channels Panel */
           .channels-panel {
             background: var(--bg-card);
-            border-radius: 20px;
-            padding: 25px;
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+            border-radius: 25px;
+            padding: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 25px 70px rgba(0, 0, 0, 0.6);
           }
 
           .panel-header {
-            margin-bottom: 25px;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
           }
 
           .panel-title {
-            font-size: 20px;
-            font-weight: 700;
+            font-size: 22px;
+            font-weight: 800;
             color: var(--primary);
-            margin-bottom: 5px;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+          }
+
+          .panel-title-icon {
+            font-size: 28px;
           }
 
           .panel-subtitle {
             color: var(--text-secondary);
-            font-size: 14px;
+            font-size: 15px;
+            line-height: 1.5;
           }
 
-          /* Channel Toggle */
-          .channels-toggle {
+          /* Channels Filter */
+          .channels-filter {
             display: flex;
             background: rgba(255, 255, 255, 0.05);
-            border-radius: 15px;
-            padding: 5px;
-            margin-bottom: 20px;
+            border-radius: 18px;
+            padding: 8px;
+            margin-bottom: 25px;
             border: 1px solid rgba(255, 255, 255, 0.1);
+            gap: 8px;
           }
 
-          .toggle-button {
+          .filter-button {
             flex: 1;
-            padding: 12px;
+            padding: 15px;
             border: none;
             background: transparent;
             color: var(--text-secondary);
             font-family: 'Cairo', sans-serif;
-            font-weight: 600;
+            font-weight: 700;
             cursor: pointer;
-            border-radius: 12px;
+            border-radius: 14px;
             transition: all 0.3s;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 8px;
-            font-size: 14px;
+            gap: 10px;
+            font-size: 15px;
           }
 
-          .toggle-button.active {
+          .filter-button:hover {
+            background: rgba(255, 255, 255, 0.1);
+          }
+
+          .filter-button.active {
             background: linear-gradient(45deg, var(--primary), var(--primary-dark));
             color: #001217;
-            box-shadow: 0 4px 15px rgba(0, 224, 214, 0.2);
+            box-shadow: 0 8px 25px rgba(0, 224, 214, 0.25);
+            transform: translateY(-2px);
+          }
+
+          .filter-button.external {
+            background: linear-gradient(45deg, var(--external), #FF8C42);
+            color: #001217;
           }
 
           /* Search Box */
           .search-container {
             position: relative;
-            margin-bottom: 20px;
+            margin-bottom: 25px;
           }
 
           .search-input {
             width: 100%;
-            padding: 15px 20px 15px 50px;
+            padding: 18px 25px 18px 60px;
             background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(0, 224, 214, 0.1);
-            border-radius: 12px;
+            border: 2px solid rgba(0, 224, 214, 0.15);
+            border-radius: 18px;
             color: var(--text);
             font-family: 'Cairo', sans-serif;
-            font-size: 16px;
+            font-size: 17px;
             transition: all 0.3s;
+            font-weight: 500;
           }
 
           .search-input:focus {
             outline: none;
             border-color: var(--primary);
             background: rgba(255, 255, 255, 0.08);
-            box-shadow: 0 0 20px rgba(0, 224, 214, 0.1);
+            box-shadow: 0 0 30px rgba(0, 224, 214, 0.15);
           }
 
           .search-icon {
             position: absolute;
-            left: 20px;
+            left: 25px;
             top: 50%;
             transform: translateY(-50%);
             color: var(--primary);
+            font-size: 20px;
           }
 
           /* Categories */
           .categories {
             display: flex;
-            gap: 10px;
+            gap: 12px;
             overflow-x: auto;
-            padding-bottom: 15px;
-            margin-bottom: 20px;
+            padding-bottom: 20px;
+            margin-bottom: 25px;
             scrollbar-width: thin;
           }
 
           .category-btn {
-            padding: 10px 20px;
+            padding: 12px 24px;
             border: none;
             border-radius: 25px;
             background: rgba(255, 255, 255, 0.05);
             color: var(--text);
             font-family: 'Cairo', sans-serif;
-            font-weight: 600;
+            font-weight: 700;
             cursor: pointer;
             white-space: nowrap;
             transition: all 0.3s;
             display: flex;
             align-items: center;
-            gap: 8px;
-            font-size: 14px;
+            gap: 10px;
+            font-size: 15px;
+            border: 2px solid transparent;
           }
 
           .category-btn:hover {
             background: rgba(0, 224, 214, 0.1);
+            border-color: rgba(0, 224, 214, 0.3);
           }
 
           .category-btn.active {
             background: linear-gradient(45deg, var(--primary), var(--primary-dark));
             color: #001217;
-            box-shadow: 0 4px 15px rgba(0, 224, 214, 0.2);
+            box-shadow: 0 8px 25px rgba(0, 224, 214, 0.25);
+            border-color: transparent;
           }
 
           /* Channels Grid */
           .channels-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 15px;
-            max-height: 500px;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 18px;
+            max-height: 550px;
             overflow-y: auto;
-            padding-right: 10px;
+            padding-right: 12px;
           }
 
           .channel-item {
             background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            border-radius: 15px;
-            padding: 20px;
+            border: 2px solid rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            padding: 25px;
             cursor: pointer;
-            transition: all 0.3s;
+            transition: all 0.4s;
             position: relative;
             overflow: hidden;
+            backdrop-filter: blur(10px);
+          }
+
+          .channel-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--external), var(--direct), var(--proxy));
+            opacity: 0;
+            transition: opacity 0.3s;
           }
 
           .channel-item:hover {
-            transform: translateY(-5px);
-            border-color: rgba(255, 255, 255, 0.1);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            transform: translateY(-8px);
+            border-color: rgba(255, 255, 255, 0.15);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
+          }
+
+          .channel-item:hover::before {
+            opacity: 1;
           }
 
           .channel-item.active {
             border-color: var(--primary);
-            box-shadow: 0 10px 30px rgba(0, 224, 214, 0.1);
+            box-shadow: 0 25px 60px rgba(0, 224, 214, 0.15);
+            background: rgba(0, 224, 214, 0.03);
+          }
+
+          .channel-item.external {
+            border-left: 5px solid var(--external);
           }
 
           .channel-item.direct {
-            border-left: 4px solid var(--success);
+            border-left: 5px solid var(--direct);
           }
 
           .channel-item.proxy {
-            border-left: 4px solid var(--warning);
+            border-left: 5px solid var(--proxy);
+          }
+
+          .channel-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 15px;
           }
 
           .channel-number {
-            position: absolute;
-            top: 15px;
-            right: 15px;
-            width: 30px;
-            height: 30px;
-            border-radius: 8px;
+            width: 40px;
+            height: 40px;
+            border-radius: 12px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-weight: 700;
-            font-size: 14px;
+            font-weight: 900;
+            font-size: 16px;
+            color: #001217;
+            flex-shrink: 0;
+          }
+
+          .external .channel-number {
+            background: linear-gradient(45deg, var(--external), #FF8C42);
+            box-shadow: 0 5px 20px rgba(255, 107, 53, 0.3);
           }
 
           .direct .channel-number {
-            background: rgba(0, 255, 136, 0.2);
-            color: var(--success);
+            background: linear-gradient(45deg, var(--direct), #00CC6D);
+            box-shadow: 0 5px 20px rgba(0, 255, 136, 0.3);
           }
 
           .proxy .channel-number {
-            background: rgba(255, 170, 0, 0.2);
-            color: var(--warning);
+            background: linear-gradient(45deg, var(--proxy), #FF9900);
+            box-shadow: 0 5px 20px rgba(255, 170, 0, 0.3);
+          }
+
+          .channel-type-indicator {
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-weight: 900;
+            font-size: 12px;
+            letter-spacing: 0.5px;
+            border: 2px solid;
+          }
+
+          .external-indicator {
+            background: rgba(255, 107, 53, 0.15);
+            color: var(--external);
+            border-color: var(--external);
+          }
+
+          .direct-indicator {
+            background: rgba(0, 255, 136, 0.15);
+            color: var(--direct);
+            border-color: var(--direct);
+          }
+
+          .proxy-indicator {
+            background: rgba(255, 170, 0, 0.15);
+            color: var(--proxy);
+            border-color: var(--proxy);
           }
 
           .channel-name {
-            font-size: 16px;
-            font-weight: 600;
-            margin-bottom: 10px;
+            font-size: 18px;
+            font-weight: 800;
+            margin-bottom: 12px;
             color: var(--text);
-            display: flex;
-            align-items: center;
-            gap: 8px;
+            line-height: 1.4;
           }
 
           .channel-details {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            font-size: 12px;
-            color: var(--text-secondary);
+            margin-top: 20px;
           }
 
           .channel-quality {
             background: rgba(255, 42, 109, 0.2);
             color: #ff6b9d;
-            padding: 4px 10px;
-            border-radius: 20px;
-          }
-
-          .channel-type-indicator {
-            padding: 4px 10px;
+            padding: 6px 14px;
             border-radius: 20px;
             font-weight: 700;
-            font-size: 11px;
+            font-size: 13px;
           }
 
-          .direct-indicator {
-            background: rgba(0, 255, 136, 0.2);
-            color: var(--success);
-            border: 1px solid var(--success);
+          .external-button {
+            padding: 10px 20px;
+            background: linear-gradient(45deg, var(--external), #FF8C42);
+            color: #001217;
+            border: none;
+            border-radius: 15px;
+            font-family: 'Cairo', sans-serif;
+            font-weight: 900;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            letter-spacing: 0.5px;
           }
 
-          .proxy-indicator {
-            background: rgba(255, 170, 0, 0.2);
-            color: var(--warning);
-            border: 1px solid var(--warning);
+          .external-button:hover {
+            background: linear-gradient(45deg, #FF8C42, var(--external));
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(255, 107, 53, 0.4);
+          }
+
+          .play-button-small {
+            padding: 10px 20px;
+            background: linear-gradient(45deg, var(--primary), var(--primary-dark));
+            color: #001217;
+            border: none;
+            border-radius: 15px;
+            font-family: 'Cairo', sans-serif;
+            font-weight: 900;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            letter-spacing: 0.5px;
+          }
+
+          .play-button-small:hover {
+            background: linear-gradient(45deg, var(--primary-dark), var(--primary));
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(0, 224, 214, 0.4);
           }
 
           /* Error Message */
           .error-message {
-            background: rgba(255, 42, 109, 0.1);
-            border: 1px solid var(--accent);
+            background: rgba(255, 42, 109, 0.15);
+            border: 2px solid var(--accent);
             color: #ffb8d0;
-            padding: 15px;
-            border-radius: 12px;
-            margin: 20px 0;
+            padding: 20px;
+            border-radius: 15px;
+            margin: 25px 0;
             text-align: center;
-            font-size: 14px;
+            font-size: 15px;
+            font-weight: 600;
+            box-shadow: 0 10px 30px rgba(255, 42, 109, 0.1);
           }
 
           /* Success Message */
           .success-message {
-            background: rgba(0, 224, 214, 0.1);
-            border: 1px solid var(--primary);
+            background: linear-gradient(45deg, rgba(0, 224, 214, 0.1), rgba(255, 107, 53, 0.05));
+            border: 2px solid rgba(0, 224, 214, 0.3);
             color: var(--primary);
-            padding: 15px;
-            border-radius: 12px;
-            margin: 20px 0;
+            padding: 20px;
+            border-radius: 15px;
+            margin: 25px 0;
             text-align: center;
-            font-size: 14px;
+            font-size: 15px;
+            font-weight: 600;
+            line-height: 1.6;
+            box-shadow: 0 10px 30px rgba(0, 224, 214, 0.1);
           }
 
-          /* Fullscreen Hint */
-          .fullscreen-hint {
-            position: absolute;
-            bottom: 20px;
-            right: 20px;
-            background: rgba(0, 0, 0, 0.7);
-            color: var(--primary);
-            padding: 8px 15px;
-            border-radius: 10px;
-            font-size: 12px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            z-index: 5;
-            opacity: 0.8;
-            transition: opacity 0.3s;
-            cursor: pointer;
-          }
-
-          .fullscreen-hint:hover {
-            opacity: 1;
-          }
-
-          /* Footer */
-          .footer {
-            text-align: center;
-            padding: 30px 20px;
-            margin-top: 50px;
-            border-top: 1px solid rgba(255, 255, 255, 0.05);
-            color: var(--text-secondary);
-            font-size: 14px;
-          }
-
-          .footer-logo {
-            color: var(--primary);
-            font-weight: 800;
-            margin-bottom: 10px;
-            font-size: 18px;
-          }
-
-          .footer-text {
-            opacity: 0.7;
+          .success-message strong {
+            color: var(--external);
           }
 
           /* Stats */
           .stats {
             display: flex;
             justify-content: center;
-            gap: 30px;
-            margin-top: 15px;
-            font-size: 12px;
+            gap: 35px;
+            margin-top: 20px;
+            font-size: 14px;
+            flex-wrap: wrap;
           }
 
           .stat-item {
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 12px;
+            padding: 12px 20px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: all 0.3s;
+          }
+
+          .stat-item:hover {
+            background: rgba(255, 255, 255, 0.05);
+            transform: translateY(-3px);
           }
 
           .stat-dot {
-            width: 8px;
-            height: 8px;
+            width: 12px;
+            height: 12px;
             border-radius: 50%;
+            box-shadow: 0 0 15px currentColor;
+          }
+
+          .stat-dot.external {
+            background: var(--external);
+            animation: externalGlow 2s infinite alternate;
           }
 
           .stat-dot.direct {
-            background: var(--success);
+            background: var(--direct);
+            animation: pulse 2s infinite;
           }
 
           .stat-dot.proxy {
-            background: var(--warning);
+            background: var(--proxy);
+            animation: pulse 2s infinite;
+          }
+
+          /* Footer */
+          .footer {
+            text-align: center;
+            padding: 35px 25px;
+            margin-top: 60px;
+            border-top: 1px solid rgba(255, 255, 255, 0.06);
+            color: var(--text-secondary);
+            font-size: 15px;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 25px;
+            backdrop-filter: blur(10px);
+          }
+
+          .footer-logo {
+            color: var(--primary);
+            font-weight: 900;
+            margin-bottom: 15px;
+            font-size: 22px;
+            letter-spacing: 1px;
+          }
+
+          .footer-text {
+            opacity: 0.8;
+            line-height: 1.8;
+            max-width: 800px;
+            margin: 0 auto;
           }
 
           /* Scrollbar */
           ::-webkit-scrollbar {
-            width: 8px;
+            width: 10px;
           }
 
           ::-webkit-scrollbar-track {
-            background: rgba(255, 255, 255, 0.05);
+            background: rgba(255, 255, 255, 0.03);
             border-radius: 10px;
           }
 
           ::-webkit-scrollbar-thumb {
-            background: linear-gradient(45deg, var(--primary), var(--primary-dark));
+            background: linear-gradient(45deg, var(--primary), var(--external));
             border-radius: 10px;
           }
 
+          ::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(45deg, var(--external), var(--direct));
+          }
+
           /* Responsive */
-          @media (max-width: 768px) {
+          @media (max-width: 1024px) {
             .header {
-              padding: 15px 20px;
+              padding: 15px 25px;
               flex-direction: column;
-              gap: 15px;
+              gap: 20px;
             }
 
             .system-status {
-              flex-direction: column;
-              gap: 10px;
+              width: 100%;
+              justify-content: center;
             }
 
             .container {
-              padding: 15px;
+              padding: 25px 15px;
             }
 
             .channels-grid {
-              grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+              grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
             }
 
             .controls {
@@ -972,19 +1371,61 @@ export default function Home() {
 
             .control-button {
               flex: 1;
-              min-width: 120px;
+              min-width: 140px;
             }
 
             .video-info {
               flex-direction: column;
-              gap: 15px;
+              gap: 20px;
               align-items: flex-start;
             }
           }
 
-          @media (max-width: 480px) {
+          @media (max-width: 768px) {
+            .logo-text {
+              font-size: 22px;
+            }
+
+            .logo-icon {
+              width: 45px;
+              height: 45px;
+            }
+
+            .status-badge {
+              padding: 8px 15px;
+              font-size: 13px;
+            }
+
+            .control-button {
+              padding: 12px 20px;
+              font-size: 14px;
+            }
+
             .channels-grid {
               grid-template-columns: 1fr;
+            }
+
+            .categories {
+              flex-wrap: wrap;
+            }
+
+            .category-btn {
+              padding: 10px 20px;
+              font-size: 14px;
+            }
+
+            .stats {
+              gap: 15px;
+            }
+
+            .stat-item {
+              padding: 10px 15px;
+            }
+          }
+
+          @media (max-width: 480px) {
+            .header {
+              padding: 15px;
             }
 
             .logo-text {
@@ -997,17 +1438,16 @@ export default function Home() {
             }
 
             .control-button {
-              padding: 10px 15px;
-              font-size: 13px;
+              min-width: 100%;
+              justify-content: center;
             }
 
-            .categories {
-              flex-wrap: wrap;
+            .channel-name {
+              font-size: 16px;
             }
 
-            .category-btn {
-              padding: 8px 15px;
-              font-size: 13px;
+            .footer {
+              padding: 25px 15px;
             }
           }
         `}</style>
@@ -1017,7 +1457,7 @@ export default function Home() {
       <header className="header">
         <div className="logo-container">
           <div className="logo-icon">
-            <svg width="25" height="25" viewBox="0 0 24 24" fill="none">
+            <svg width="30" height="30" viewBox="0 0 24 24" fill="none">
               <path d="M12 2L2 7L12 12L22 7L12 2Z" fill="#001217"/>
               <path d="M2 17L12 22L22 17" stroke="#001217" strokeWidth="2"/>
               <path d="M2 12L12 17L22 12" stroke="#001217" strokeWidth="2"/>
@@ -1025,17 +1465,21 @@ export default function Home() {
           </div>
           <div>
             <div className="logo-text">MISTER-AI-LIVE</div>
-            <div className="logo-subtext">نظام البث المباشر المزدوج</div>
+            <div className="logo-subtext">نظام البث المتعدد - مباشر + خارجي + بروكسي</div>
           </div>
         </div>
         <div className="system-status">
-          <div className="status-badge status-direct">
+          <div className="status-badge status-external" onClick={() => setCategory('sports')}>
             <div className="status-dot"></div>
-            <span>قنوات مباشرة: {directChannels.length}</span>
+            <span>خارجي: {externalChannels.length}</span>
           </div>
-          <div className="status-badge status-proxy">
+          <div className="status-badge status-direct" onClick={() => setCategory('test')}>
             <div className="status-dot"></div>
-            <span>قنوات بروكسي: {proxyChannels.length}</span>
+            <span>مباشر: {directChannels.length}</span>
+          </div>
+          <div className="status-badge status-proxy" onClick={() => setShowAllChannels(true)}>
+            <div className="status-dot"></div>
+            <span>بروكسي: {proxyChannels.length}</span>
           </div>
         </div>
       </header>
@@ -1070,12 +1514,19 @@ export default function Home() {
                 <div className="channel-meta">
                   {active && (
                     <>
-                      <span className={`channel-type-badge ${allChannels.find(c => c.id === active)?.direct ? 'channel-direct' : 'channel-proxy'}`}>
-                        {allChannels.find(c => c.id === active)?.direct ? '🔗 مباشر' : '🛡️ بروكسي'}
+                      <span className={`channel-type-badge ${
+                        allChannels.find(c => c.id === active)?.type === 'external' ? 'channel-external' :
+                        allChannels.find(c => c.id === active)?.type === 'direct' ? 'channel-direct' : 'channel-proxy'
+                      }`}>
+                        {allChannels.find(c => c.id === active)?.type === 'external' ? '🌐 خارجي' :
+                         allChannels.find(c => c.id === active)?.type === 'direct' ? '🔗 مباشر' : '🛡️ بروكسي'}
                       </span>
                       <span>{allChannels.find(c => c.id === active)?.quality}</span>
                       <span>{allChannels.find(c => c.id === active)?.lang?.toUpperCase()}</span>
-                      <div className="status-dot-active"></div>
+                      <div className={`status-dot-active ${
+                        allChannels.find(c => c.id === active)?.type === 'external' ? 'status-external-dot' :
+                        allChannels.find(c => c.id === active)?.type === 'direct' ? 'status-direct-dot' : 'status-proxy-dot'
+                      }`}></div>
                       <span>{active ? "جاري التشغيل" : "متوقف"}</span>
                     </>
                   )}
@@ -1112,6 +1563,21 @@ export default function Home() {
                 )}
               </button>
 
+              <button className="control-button external" onClick={() => {
+                const ch = active ? allChannels.find(c => c.id === active) : externalChannels[0];
+                if (ch && ch.type === 'external') {
+                  openExternalChannel(ch);
+                } else {
+                  // إذا لم تكن القناة خارجية، فتح أول قناة خارجية
+                  openExternalChannel(externalChannels[0]);
+                }
+              }}>
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M19 19H5V5h7V3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2v-7h-2v7zM14 3v2h3.59l-9.83 9.83 1.41 1.41L19 6.41V10h2V3h-7z"/>
+                </svg>
+                فتح خارجياً
+              </button>
+
               <button className="control-button fullscreen" onClick={toggleFullscreen}>
                 {fullscreen ? (
                   <>
@@ -1130,41 +1596,39 @@ export default function Home() {
                 )}
               </button>
             </div>
-
-            {!fullscreen && (
-              <div className="fullscreen-hint" onClick={toggleFullscreen}>
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"/>
-                </svg>
-                انقر للتكبير الكامل
-              </div>
-            )}
           </div>
 
           {/* Channels Panel */}
           <div className="channels-panel">
             <div className="panel-header">
-              <div className="panel-title">القنوات المتاحة ({displayedChannels.length})</div>
+              <div className="panel-title">
+                <span className="panel-title-icon">📡</span>
+                القنوات المتاحة ({filteredChannels.length})
+              </div>
               <div className="panel-subtitle">
-                {showAllChannels ? 'جميع القنوات (مباشرة + بروكسي)' : 'القنوات المباشرة فقط'}
+                اختر قناة للبث المباشر داخل الموقع، أو افتح قناة خارجية في نافذة جديدة
               </div>
             </div>
 
-            {/* Channel Type Toggle */}
-            <div className="channels-toggle">
+            {/* Channels Filter */}
+            <div className="channels-filter">
               <button 
-                className={`toggle-button ${!showAllChannels ? 'active' : ''}`}
-                onClick={() => setShowAllChannels(false)}
+                className={`filter-button ${category === 'sports' ? 'active' : ''}`}
+                onClick={() => setCategory('sports')}
               >
-                <span>🔗</span>
-                مباشرة فقط
+                ⚽ رياضية
               </button>
               <button 
-                className={`toggle-button ${showAllChannels ? 'active' : ''}`}
-                onClick={() => setShowAllChannels(true)}
+                className={`filter-button ${category === 'national' ? 'active' : ''}`}
+                onClick={() => setCategory('national')}
               >
-                <span>🔄</span>
-                جميع القنوات
+                🇩🇿 جزائرية
+              </button>
+              <button 
+                className={`filter-button ${category === 'all' ? 'active' : ''}`}
+                onClick={() => setCategory('all')}
+              >
+                📺 جميع
               </button>
             </div>
 
@@ -1173,12 +1637,12 @@ export default function Home() {
               <input
                 type="text"
                 className="search-input"
-                placeholder="ابحث عن قناة..."
+                placeholder="ابحث عن قناة رياضية، جزائرية، أو أفلام..."
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
               />
               <div className="search-icon">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
                   <path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
                 </svg>
               </div>
@@ -1200,23 +1664,59 @@ export default function Home() {
 
             {/* Channels Grid */}
             <div className="channels-grid">
-              {displayedChannels.map((ch) => (
+              {filteredChannels.map((ch) => (
                 <div
                   key={ch.id}
-                  className={`channel-item ${ch.direct ? 'direct' : 'proxy'} ${active === ch.id ? 'active' : ''}`}
-                  onClick={() => playChannel(ch)}
+                  className={`channel-item ${ch.type} ${active === ch.id ? 'active' : ''}`}
                 >
-                  <div className="channel-number">
-                    {ch.direct ? '🔗' : '🛡️'}
+                  <div className="channel-header">
+                    <div className="channel-number">
+                      {ch.type === 'external' ? '🌐' : 
+                       ch.type === 'direct' ? '🔗' : '🛡️'}
+                    </div>
+                    <span className={`channel-type-indicator ${
+                      ch.type === 'external' ? 'external-indicator' :
+                      ch.type === 'direct' ? 'direct-indicator' : 'proxy-indicator'
+                    }`}>
+                      {ch.type === 'external' ? 'خارجي' : 
+                       ch.type === 'direct' ? 'مباشر' : 'بروكسي'}
+                    </span>
                   </div>
+                  
                   <div className="channel-name">
                     {ch.title}
                   </div>
+                  
                   <div className="channel-details">
                     <span className="channel-quality">{ch.quality}</span>
-                    <span className={`channel-type-indicator ${ch.direct ? 'direct-indicator' : 'proxy-indicator'}`}>
-                      {ch.direct ? 'مباشر' : 'بروكسي'}
-                    </span>
+                    
+                    {ch.type === 'external' ? (
+                      <button 
+                        className="external-button"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          openExternalChannel(ch);
+                        }}
+                      >
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                          <path d="M19 19H5V5h7V3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2v-7h-2v7zM14 3v2h3.59l-9.83 9.83 1.41 1.41L19 6.41V10h2V3h-7z"/>
+                        </svg>
+                        فتح خارجياً
+                      </button>
+                    ) : (
+                      <button 
+                        className="play-button-small"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          playChannel(ch);
+                        }}
+                      >
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                          <path d="M8 5v14l11-7z"/>
+                        </svg>
+                        تشغيل
+                      </button>
+                    )}
                   </div>
                 </div>
               ))}
@@ -1231,19 +1731,20 @@ export default function Home() {
         )}
 
         <div className="success-message">
-          💡 <strong>نظام البث المزدوج:</strong> 
-          القنوات المباشرة (🔗) تعمل بدون بروكسي - القنوات البروكسية (🛡️) تعمل عبر نظام الحماية
-        </div>
-      </main>
-
-      <footer className="footer">
-        <div className="footer-logo">MISTER-AI-LIVE</div>
-        <div className="footer-text">
-          © 2026 MISTERAI LIVE — نظام البث المباشر المزدوج
+          🚀 <strong>نظام البث المتعدد:</strong> 
           <br />
-          <small>مباشر + بروكسي لنظام بث متكامل</small>
+          🌐 <strong>القنوات الخارجية:</strong> تفتح في نافذة جديدة (رياضية + جزائرية + أفلام)
+          <br />
+          🔗 <strong>القنوات المباشرة:</strong> تعمل داخل الموقع بدون بروكسي
+          <br />
+          🛡️ <strong>القنوات البروكسية:</strong> تعمل داخل الموقع عبر نظام الحماية
         </div>
+
         <div className="stats">
+          <div className="stat-item">
+            <div className="stat-dot external"></div>
+            <span>قنوات خارجية: {externalChannels.length}</span>
+          </div>
           <div className="stat-item">
             <div className="stat-dot direct"></div>
             <span>قنوات مباشرة: {directChannels.length}</span>
@@ -1253,9 +1754,20 @@ export default function Home() {
             <span>قنوات بروكسي: {proxyChannels.length}</span>
           </div>
           <div className="stat-item">
-            <div className="stat-dot-active"></div>
-            <span>إجمالي القنوات: {allChannels.length}</span>
+            <div className="stat-dot external"></div>
+            <span>إجمالي: {allChannels.length} قناة</span>
           </div>
+        </div>
+      </main>
+
+      <footer className="footer">
+        <div className="footer-logo">MISTER-AI-LIVE</div>
+        <div className="footer-text">
+          © 2026 MISTERAI LIVE — نظام البث المتعدد المتطور
+          <br />
+          <small>دمج القنوات الخارجية + المباشرة + البروكسية في نظام واحد متكامل</small>
+          <br />
+          <small>قم بفتح القنوات الرياضية والجزائرية في نافذة خارجية بنقرة واحدة!</small>
         </div>
       </footer>
     </>
