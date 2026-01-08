@@ -8,7 +8,6 @@ export default function Home() {
   const [muted, setMuted] = useState(false);
   const [error, setError] = useState("");
 
-  // مصفوفة القنوات الأصلية الخاصة بك (بدون أي تعديل)
   const channels = [
     { id: "1", title: "|CAN|AR beIN SPORTS Max 1 ❹Ⓚ", url: "http://fr.ottv.pro/live/4476647188407159/4476647188407159/432904.m3u8" },
     { id: "2", title: "|CAN|AR beIN SPORTS Max 1 ⒻⒽⒹ", url: "http://fr.ottv.pro/live/4476647188407159/4476647188407159/432903.m3u8" },
@@ -38,6 +37,8 @@ export default function Home() {
     { id: "26", title: "|DZ| ALGERIE 7", url: "http://fr.ottv.pro/live/4476647188407159/4476647188407159/152921.m3u8" },
     { id: "27", title: "|DZ| CANAL ALGERIE", url: "http://fr.ottv.pro/live/4476647188407159/4476647188407159/1687.m3u8" },
     { id: "28", title: "|DZ| A3 ALGERIE", url: "http://fr.ottv.pro/live/4476647188407159/4476647188407159/1675.m3u8" },
+
+    // Rakuten sample channels
     { id: "29", title: "Rakuten_Top_Movies_UK_(1080p)", url: "https://0145451975a64b35866170fd2e8fa486.mediatailor.eu-west-1.amazonaws.com/v1/master/0547f18649bd788bec7b67b746e47670f558b6b2/production-LiveChannel-5987/master.m3u8" },
     { id: "30", title: "Rakuten_TV_Action_Movies_Finland_(1080p)", url: "https://bca5a421a70c46ad911efd0a4767c4bf.mediatailor.eu-west-1.amazonaws.com/v1/master/0547f18649bd788bec7b67b746e47670f558b6b2/production-LiveChannel-6075/master.m3u8" },
     { id: "31", title: "Rakuten_TV_Action_Movies_Germany_(1080p)", url: "https://284824cf70404fdfb6ddf9349009c710.mediatailor.eu-west-1.amazonaws.com/v1/master/0547f18649bd788bec7b67b746e47670f558b6b2/production-LiveChannel-6066/master.m3u8" },
@@ -60,7 +61,6 @@ export default function Home() {
     { id: "48", title: "Rakuten_TV_Top_Movies_Italy_(1080p)", url: "https://54045f0c40fd442c8b06df076aaf1e85.mediatailor.eu-west-1.amazonaws.com/v1/master/0547f18649bd788bec7b67b746e47670f558b6b2/production-LiveChannel-6065/master.m3u8" }
   ];
 
-  // دالة التشغيل الأصلية كما هي تماماً لضمان السرعة
   useEffect(() => {
     const s = document.createElement("script");
     s.src = "https://cdn.jsdelivr.net/npm/hls.js@1.4.4/dist/hls.min.js";
@@ -91,7 +91,10 @@ export default function Home() {
       return;
     }
 
-    if (hlsRef.current) { try { hlsRef.current.destroy(); } catch {} hlsRef.current = null; }
+    if (hlsRef.current) {
+      try { hlsRef.current.destroy(); } catch {}
+      hlsRef.current = null;
+    }
     if (Hls.isSupported()) {
       const hls = new Hls({ maxBufferLength: 30 });
       hlsRef.current = hls;
@@ -117,41 +120,69 @@ export default function Home() {
         <title>𝐌𝐈𝐒𝐓𝐄𝐑-𝐀𝐈-𝐋𝐈𝐕𝐄 — Premium Interface</title>
         <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap" rel="stylesheet" />
         <style>{`
-          :root { --bg: #0b0202; --accent: #00e0d6; --accent-glow: rgba(0, 224, 214, 0.4); }
-          body { margin:0; font-family: 'Cairo', sans-serif; background: var(--bg); color:#fff; background-image: radial-gradient(circle at 50% -20%, #300a0a, transparent); }
+          :root {
+            --bg: #0b0202;
+            --accent: #00e0d6;
+            --accent-glow: rgba(0, 224, 214, 0.4);
+          }
+          body { 
+            margin:0; font-family: 'Cairo', sans-serif; background: var(--bg); color:#fff;
+            background-image: radial-gradient(circle at 50% -20%, #300a0a, transparent);
+          }
           
-          /* اللوجو المتحرك */
-          .logo-container { position: fixed; top: 20px; right: 20px; z-index: 50; display: flex; align-items: center; gap: 12px; }
-          .logo-box { width: 50px; height: 50px; background: linear-gradient(135deg, #00e0d6, #0077ff); border-radius: 12px; display: grid; place-items: center; animation: float 3s infinite ease-in-out; box-shadow: 0 0 20px var(--accent-glow); }
-          @keyframes float { 0%, 100% { transform: translateY(0) rotate(-5deg); } 50% { transform: translateY(-5px) rotate(5deg); } }
-          .logo-text { font-weight: 900; font-size: 18px; color: #fff; text-shadow: 0 0 10px rgba(0,224,214,0.5); }
+          /* Animated Logo */
+          .logo-container {
+            position: fixed; top: 20px; right: 20px; z-index: 50; display: flex; align-items: center; gap: 12px;
+          }
+          .logo-box {
+            width: 50px; height: 50px; background: linear-gradient(135deg, #00e0d6, #0077ff);
+            border-radius: 12px; display: grid; place-items: center;
+            animation: colorShift 5s infinite alternate, float 3s infinite ease-in-out;
+            box-shadow: 0 0 20px var(--accent-glow);
+          }
+          @keyframes colorShift {
+            0% { filter: hue-rotate(0deg); }
+            100% { filter: hue-rotate(90deg); }
+          }
+          @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(-5deg); }
+            50% { transform: translateY(-5px) rotate(5deg); }
+          }
+          .logo-text { font-weight: 900; font-size: 18px; letter-spacing: 1px; color: #fff; text-shadow: 0 0 10px rgba(0,224,214,0.5); }
 
-          .container { min-height: 100vh; display: flex; flex-direction: column; align-items: center; padding: 40px 20px; }
+          .container { min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 40px 20px; }
 
-          /* إطار الفيديو */
-          .laptop-mockup { width: 100%; max-width: 900px; background: #1a1a1a; border: 8px solid #333; border-radius: 20px 20px 0 0; position: relative; box-shadow: 0 50px 100px rgba(0,0,0,0.8); }
+          /* Laptop Screen Mockup */
+          .laptop-mockup {
+            width: 100%; max-width: 900px; background: #1a1a1a; border: 8px solid #333;
+            border-radius: 20px 20px 0 0; position: relative; box-shadow: 0 50px 100px rgba(0,0,0,0.8);
+          }
           .screen-content { aspect-ratio: 16/9; background: #000; position: relative; overflow: hidden; }
-          .laptop-bottom { width: 105%; height: 12px; background: linear-gradient(to bottom, #444, #222); border-radius: 0 0 20px 20px; margin-bottom: 30px; position: relative; left: -2.5%; }
+          .laptop-bottom {
+            width: 105%; height: 12px; background: linear-gradient(to bottom, #444, #222);
+            border-radius: 0 0 20px 20px; margin-bottom: 30px; position: relative; left: -2.5%;
+          }
 
-          /* شبكة القنوات (Glossy Effect) */
-          .channels-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 15px; width: 100%; max-width: 900px; margin-top: 20px; }
-          .channel-btn { 
-             background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); 
-             padding: 15px; border-radius: 15px; cursor: pointer; transition: 0.3s; color: #ccc; 
-             font-weight: 700; position: relative; overflow: hidden;
+          /* Channels Grid */
+          .channels-grid {
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+            gap: 15px; width: 100%; max-width: 900px; margin-top: 20px;
           }
-          /* تأثير الوميض الزجاجي عند المرور */
-          .channel-btn::after {
-            content: ''; position: absolute; top: -50%; left: -100%; width: 50%; height: 200%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
-            transform: rotate(25deg); transition: 0.5s;
+          .channel-btn {
+            background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);
+            padding: 15px; border-radius: 15px; cursor: pointer; transition: 0.3s;
+            color: #ccc; font-weight: 700;
           }
-          .channel-btn:hover::after { left: 150%; }
           .channel-btn:hover { background: rgba(0, 224, 214, 0.1); border-color: var(--accent); transform: translateY(-3px); color: #fff; }
           .channel-btn.active { background: var(--accent); color: #000; border-color: var(--accent); box-shadow: 0 0 20px var(--accent-glow); }
 
-          .controls-bar { display: flex; gap: 15px; margin-top: 25px; width: 100%; max-width: 900px; justify-content: center; }
-          .action-btn { padding: 10px 25px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.2); background: rgba(255,255,255,0.05); color: #fff; cursor: pointer; font-weight: bold; transition: 0.2s; }
+          .controls-bar {
+            display: flex; gap: 15px; margin-top: 25px; width: 100%; max-width: 900px; justify-content: center;
+          }
+          .action-btn {
+            padding: 10px 25px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.2);
+            background: rgba(255,255,255,0.05); color: #fff; cursor: pointer; font-weight: bold; transition: 0.2s;
+          }
           .action-btn:hover { background: #fff; color: #000; }
           
           .footer-note { margin-top: 40px; font-size: 12px; opacity: 0.4; letter-spacing: 2px; text-transform: uppercase; }
@@ -171,7 +202,7 @@ export default function Home() {
             <video ref={videoRef} controls playsInline style={{ width:"100%", height:"100%" }} />
             {!active && (
               <div style={{position:"absolute", inset:0, display:"flex", alignItems:"center", justifyContent:"center", background:"rgba(0,0,0,0.8)"}}>
-                <button onClick={() => playChannel(channels[18])} className="action-btn" style={{background: 'var(--accent)', color: '#000', border:'none'}}>ابدأ البث (beIN 1)</button>
+                <button onClick={() => playChannel(channels[0])} className="action-btn" style={{background: 'var(--accent)', color: '#000', border:'none'}}>ابدأ البث الآن</button>
               </div>
             )}
           </div>
@@ -186,6 +217,7 @@ export default function Home() {
               onClick={() => playChannel(ch)}
             >
               <div>{ch.title}</div>
+              <div style={{fontSize:10, marginTop:4, opacity:0.7}}>BeIN Sports HD</div>
             </button>
           ))}
         </div>
@@ -198,7 +230,9 @@ export default function Home() {
 
         {error && <div style={{color:"#ff4b4b", marginTop:20, fontWeight:"bold"}}>{error}</div>}
 
-        <div className="footer-note">Design by MUSTAPHA — 2026 Premium</div>
+        <div className="footer-note italic">
+          Design by MUSTAPHA — 2026 Security Version
+        </div>
       </div>
     </>
   );
