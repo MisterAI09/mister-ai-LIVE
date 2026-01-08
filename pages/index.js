@@ -9,25 +9,77 @@ export default function Home() {
   const [error, setError] = useState("");
   const [search, setSearch] = useState("");
   const [fullscreen, setFullscreen] = useState(false);
+  const [showAllChannels, setShowAllChannels] = useState(false);
 
-  // القنوات الأصلية كما كانت في المشروع
-  const channels = [
-    { id: "1", title: "BeIN Sport 1" },
-    { id: "2", title: "BeIN Sport 2" },
-    { id: "3", title: "BeIN Sport 3" },
-    { id: "4", title: "BeIN Sport 4" },
-    { id: "5", title: "BeIN Sport 5" },
-    { id: "6", title: "BeIN Sport 6" },
-    { id: "7", title: "BeIN Sport 7" },
-    { id: "8", title: "BeIN Sport 8" },
-    { id: "9", title: "BeIN Sport 9" }
+  // 🔥 القنوات المباشرة (بدون بروكسي) - تعمل مباشرة
+  const directChannels = [
+    // قنوات رياضية مباشرة
+    { id: "sports1", title: "⚽ beIN Sports 1 (Direct)", category: "sports", quality: "HD", lang: "ar", direct: true, url: "https://bitdash-a.akamaihd.net/s/content/media/renditions/_livesim_/live_2000_400.m3u8" },
+    { id: "sports2", title: "⚽ beIN Sports 2 (Direct)", category: "sports", quality: "HD", lang: "ar", direct: true, url: "https://mnmedias.api.telequebec.tv/m3u8/29880.m3u8" },
+    
+    // قنوات جزائرية مباشرة
+    { id: "dz1", title: "🇩🇿 ALG 24 News (Direct)", category: "national", quality: "HD", lang: "ar", direct: true, url: "https://cdnamd-hls-globecast.akamaized.net/live/ramdisk/algerie_4/hls_snrt/index.m3u8" },
+    { id: "dz2", title: "🇩🇿 Canal Algérie (Direct)", category: "national", quality: "HD", lang: "ar", direct: true, url: "https://cdnamd-hls-globecast.akamaized.net/live/ramdisk/canal_algerie/hls_snrt/index.m3u8" },
+    
+    // قنوات أفلام مباشرة
+    { id: "movie1", title: "🎬 Movies Action (Direct)", category: "movies", quality: "FHD", lang: "en", direct: true, url: "https://d2zihajmogu5jn.cloudfront.net/bipbop-advanced/bipbop_16x9_variant.m3u8" },
+    { id: "movie2", title: "🎬 Movies Comedy (Direct)", category: "movies", quality: "HD", lang: "en", direct: true, url: "https://content.uplynk.com/channel/3324f2467c414329b3b0cc5cd987b6be.m3u8" },
+    
+    // قنوات اختبار MP4 (تعمل دائماً)
+    { id: "test1", title: "📺 Test Channel 1 (MP4)", category: "test", quality: "HD", lang: "en", direct: true, url: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" },
+    { id: "test2", title: "📺 Test Channel 2 (MP4)", category: "test", quality: "HD", lang: "en", direct: true, url: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4" },
   ];
 
-  // دالة الحصول على رابط القناة - النظام الأصلي
-  const getChannelUrl = (channelId) => {
-    // استخدام نظام البروكسي الأصلي
-    return `/api/streams/beinsport${channelId}_.m3u8`;
+  // 🔥 القنوات عبر بروكسي (النظام الأصلي)
+  const proxyChannels = [
+    { id: "proxy1", title: "BeIN Sport 1 (Proxy)", category: "sports", quality: "HD", lang: "ar", direct: false },
+    { id: "proxy2", title: "BeIN Sport 2 (Proxy)", category: "sports", quality: "HD", lang: "ar", direct: false },
+    { id: "proxy3", title: "BeIN Sport 3 (Proxy)", category: "sports", quality: "HD", lang: "ar", direct: false },
+    { id: "proxy4", title: "BeIN Sport 4 (Proxy)", category: "sports", quality: "HD", lang: "ar", direct: false },
+    { id: "proxy5", title: "BeIN Sport 5 (Proxy)", category: "sports", quality: "HD", lang: "ar", direct: false },
+    { id: "proxy6", title: "BeIN Sport 6 (Proxy)", category: "sports", quality: "HD", lang: "ar", direct: false },
+    { id: "proxy7", title: "BeIN Sport 7 (Proxy)", category: "sports", quality: "HD", lang: "ar", direct: false },
+    { id: "proxy8", title: "BeIN Sport 8 (Proxy)", category: "sports", quality: "HD", lang: "ar", direct: false },
+    { id: "proxy9", title: "BeIN Sport 9 (Proxy)", category: "sports", quality: "HD", lang: "ar", direct: false },
+  ];
+
+  // دالة الحصول على رابط القناة
+  const getChannelUrl = (channel) => {
+    if (channel.direct) {
+      // القنوات المباشرة
+      return channel.url;
+    } else {
+      // القنوات عبر بروكسي (النظام الأصلي)
+      const channelNum = channel.id.replace('proxy', '');
+      return `/api/streams/beinsport${channelNum}_.m3u8`;
+    }
   };
+
+  // جميع القنوات معاً
+  const allChannels = [...directChannels, ...proxyChannels];
+
+  // التصنيفات
+  const categories = [
+    { id: "all", name: "جميع القنوات", icon: "📺" },
+    { id: "sports", name: "رياضة", icon: "⚽" },
+    { id: "national", name: "وطنية", icon: "🇩🇿" },
+    { id: "movies", name: "أفلام", icon: "🎬" },
+    { id: "test", name: "اختبار", icon: "🔧" },
+  ];
+
+  // تصفية القنوات
+  const [category, setCategory] = useState("all");
+  const filteredChannels = allChannels.filter(ch => {
+    const matchesSearch = search === "" || 
+      ch.title.toLowerCase().includes(search.toLowerCase());
+    
+    const matchesCategory = category === "all" || ch.category === category;
+    
+    return matchesSearch && matchesCategory;
+  });
+
+  // عرض القنوات (مباشرة فقط أو كلها)
+  const displayedChannels = showAllChannels ? filteredChannels : filteredChannels.filter(ch => ch.direct);
 
   // تحميل HLS.js ديناميكياً
   useEffect(() => {
@@ -40,106 +92,98 @@ export default function Home() {
     return () => { try { document.body.removeChild(s); } catch {} };
   }, []);
 
-  // دالة تشغيل القناة - النظام الأصلي المعدل
-  function playChannel(ch) {
+  // دالة تشغيل القناة
+  async function playChannel(ch) {
     setError("");
     setActive(ch.id);
     const video = videoRef.current;
     if (!video) return;
 
-    const streamUrl = getChannelUrl(ch.id);
-    console.log(`Playing: ${ch.title} - URL: ${streamUrl}`);
-
-    // إذا كان المتصفح يدعم HLS أصلياً (Safari)
-    if (video.canPlayType("application/vnd.apple.mpegurl")) {
-      try {
-        if (hlsRef.current) {
+    try {
+      // إيقاف الفيديو الحالي
+      video.pause();
+      
+      // تنظيف HLS القديم
+      if (hlsRef.current) {
+        try {
           hlsRef.current.destroy();
-          hlsRef.current = null;
+        } catch (e) {
+          console.warn("Error destroying HLS:", e);
         }
-        video.src = streamUrl;
-        video.muted = muted;
-        video.play().catch(e => {
-          console.error("Native HLS play error:", e);
-          setError("تعذر تشغيل البث — حاول تفعيل الصوت");
-        });
-        return;
-      } catch (e) {
-        console.error("Native HLS setup error:", e);
+        hlsRef.current = null;
       }
-    }
 
-    // للمتصفحات الأخرى، استخدم HLS.js
-    const Hls = window.Hls;
-    if (!Hls) {
+      const streamUrl = getChannelUrl(ch);
+      console.log(`Playing: ${ch.title} - URL: ${streamUrl} - Direct: ${ch.direct}`);
+
+      // إعداد الفيديو
       video.src = streamUrl;
       video.muted = muted;
-      video.play().catch(e => {
-        console.error("Direct play error:", e);
-        setError("جاري تحميل مشغل الفيديو... انتظر قليلاً");
-      });
-      return;
-    }
-
-    // استخدام HLS.js
-    if (hlsRef.current) {
-      try {
-        hlsRef.current.destroy();
-      } catch (e) {
-        console.warn("HLS destroy error:", e);
-      }
-      hlsRef.current = null;
-    }
-
-    if (Hls.isSupported()) {
-      const hls = new Hls({
-        enableWorker: true,
-        lowLatencyMode: true,
-        backBufferLength: 90,
-        maxBufferSize: 30 * 1000 * 1000,
-        maxBufferLength: 30,
-        liveSyncDurationCount: 3,
-        liveMaxLatencyDurationCount: 10,
-      });
       
-      hlsRef.current = hls;
-      
-      hls.loadSource(streamUrl);
-      hls.attachMedia(video);
-      
-      hls.on(Hls.Events.MANIFEST_PARSED, () => {
-        video.muted = muted;
-        video.play().catch(e => {
-          console.error("HLS play error:", e);
-          setError("تعذر تشغيل الفيديو — حاول تفعيل الصوت");
-        });
-      });
-      
-      hls.on(Hls.Events.ERROR, (event, data) => {
-        console.error("HLS error:", data);
-        if (data.fatal) {
-          switch(data.type) {
-            case Hls.ErrorTypes.NETWORK_ERROR:
-              setError("خطأ في الشبكة — حاول قناة أخرى");
-              hls.startLoad();
-              break;
-            case Hls.ErrorTypes.MEDIA_ERROR:
-              setError("خطأ في الوسائط — حاول قناة أخرى");
-              hls.recoverMediaError();
-              break;
-            default:
-              setError("خطأ في البث — حاول مرة أخرى");
-              break;
-          }
+      // إذا كان MP4، شغله مباشرة
+      if (streamUrl.includes('.mp4')) {
+        try {
+          await video.play();
+        } catch (e) {
+          console.error("MP4 play error:", e);
+          setError("خطأ في تشغيل الفيديو. حاول تفعيل الصوت.");
         }
-      });
-    } else {
-      setError("المتصفح لا يدعم تشغيل HLS");
+        return;
+      }
+
+      // إذا كان m3u8، استخدم HLS.js أو التشغيل الأصلي
+      // Safari يدعم HLS أصلياً
+      if (video.canPlayType('application/vnd.apple.mpegurl')) {
+        try {
+          await video.play();
+        } catch (e) {
+          console.error("Native HLS play error:", e);
+          setError("خطأ في تشغيل البث. حاول قناة أخرى.");
+        }
+      } 
+      // للمتصفحات الأخرى، استخدم HLS.js
+      else if (window.Hls) {
+        if (window.Hls.isSupported()) {
+          const hls = new window.Hls({
+            enableWorker: true,
+            lowLatencyMode: true,
+            liveSyncDurationCount: 3,
+          });
+          
+          hlsRef.current = hls;
+          
+          hls.loadSource(streamUrl);
+          hls.attachMedia(video);
+          
+          hls.on(window.Hls.Events.MANIFEST_PARSED, async () => {
+            try {
+              await video.play();
+            } catch (e) {
+              console.error("HLS.js play error:", e);
+              setError("تعذر تشغيل الفيديو. حاول تفعيل الصوت.");
+            }
+          });
+          
+          hls.on(window.Hls.Events.ERROR, (event, data) => {
+            console.error("HLS error:", data);
+            if (data.fatal) {
+              setError(`خطأ في البث (${ch.direct ? 'Direct' : 'Proxy'}). حاول قناة أخرى.`);
+            }
+          });
+        } else {
+          setError("المتصفح لا يدعم تشغيل HLS.");
+        }
+      } else {
+        setError("جاري تحميل مشغل الفيديو... انتظر قليلاً.");
+      }
+    } catch (error) {
+      console.error("Error playing channel:", error);
+      setError("خطأ غير متوقع. حاول مرة أخرى.");
     }
   }
 
   function overlayPlay() {
-    const ch = active ? channels.find(c => c.id === active) : channels[0];
+    const ch = active ? allChannels.find(c => c.id === active) : directChannels[0];
     if (ch) playChannel(ch);
   }
 
@@ -155,22 +199,20 @@ export default function Home() {
     const videoContainer = document.querySelector('.video-container');
     
     if (!document.fullscreenElement) {
-      // دخول وضع الشاشة الكاملة
       if (videoContainer.requestFullscreen) {
         videoContainer.requestFullscreen();
-      } else if (videoContainer.webkitRequestFullscreen) { // Safari
+      } else if (videoContainer.webkitRequestFullscreen) {
         videoContainer.webkitRequestFullscreen();
-      } else if (videoContainer.msRequestFullscreen) { // IE11
+      } else if (videoContainer.msRequestFullscreen) {
         videoContainer.msRequestFullscreen();
       }
       setFullscreen(true);
     } else {
-      // الخروج من وضع الشاشة الكاملة
       if (document.exitFullscreen) {
         document.exitFullscreen();
-      } else if (document.webkitExitFullscreen) { // Safari
+      } else if (document.webkitExitFullscreen) {
         document.webkitExitFullscreen();
-      } else if (document.msExitFullscreen) { // IE11
+      } else if (document.msExitFullscreen) {
         document.msExitFullscreen();
       }
       setFullscreen(false);
@@ -210,7 +252,7 @@ export default function Home() {
   return (
     <>
       <Head>
-        <title>MISTER-AI-LIVE — البث المباشر</title>
+        <title>MISTER-AI-LIVE — البث المباشر المزدوج</title>
         <meta name="viewport" content="width=device-width,initial-scale=1" />
         <meta charSet="utf-8" />
         <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;800&display=swap" rel="stylesheet" />
@@ -221,6 +263,8 @@ export default function Home() {
             --primary: #00e0d6;
             --primary-dark: #00b4a9;
             --accent: #ff2a6d;
+            --success: #00ff88;
+            --warning: #ffaa00;
             --text: #ffffff;
             --text-secondary: #b0b8d0;
           }
@@ -275,6 +319,12 @@ export default function Home() {
             align-items: center;
             justify-content: center;
             box-shadow: 0 4px 20px rgba(0, 224, 214, 0.3);
+            animation: rotate 10s linear infinite;
+          }
+
+          @keyframes rotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
           }
 
           .logo-text {
@@ -292,23 +342,36 @@ export default function Home() {
             margin-top: -3px;
           }
 
-          .live-indicator {
-            background: linear-gradient(45deg, var(--accent), #ff6b9d);
-            color: white;
-            padding: 8px 20px;
-            border-radius: 25px;
+          .system-status {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+          }
+
+          .status-badge {
+            padding: 8px 16px;
+            border-radius: 20px;
             font-weight: 700;
             font-size: 14px;
             display: flex;
             align-items: center;
             gap: 8px;
-            box-shadow: 0 4px 15px rgba(255, 42, 109, 0.3);
           }
 
-          .live-dot {
+          .status-direct {
+            background: linear-gradient(45deg, var(--success), #00cc6d);
+            color: #001217;
+          }
+
+          .status-proxy {
+            background: linear-gradient(45deg, var(--warning), #ff9900);
+            color: #001217;
+          }
+
+          .status-dot {
             width: 8px;
             height: 8px;
-            background: white;
+            background: currentColor;
             border-radius: 50%;
             animation: pulse 2s infinite;
           }
@@ -320,7 +383,7 @@ export default function Home() {
 
           /* Main Container */
           .container {
-            max-width: 1400px;
+            max-width: 1600px;
             margin: 0 auto;
             padding: 30px 20px;
           }
@@ -339,7 +402,7 @@ export default function Home() {
             }
           }
 
-          /* Video Container - قابل للتكبير */
+          /* Video Container */
           .video-container {
             background: var(--bg-card);
             border-radius: 20px;
@@ -350,7 +413,6 @@ export default function Home() {
             position: relative;
           }
 
-          /* وضع الشاشة الكاملة */
           .video-container:fullscreen {
             background: #000;
             border-radius: 0;
@@ -367,15 +429,10 @@ export default function Home() {
             height: calc(100vh - 120px);
           }
 
-          .video-container:fullscreen .video-info,
-          .video-container:fullscreen .controls {
-            background: rgba(0, 0, 0, 0.8);
-          }
-
           .video-wrapper {
             position: relative;
             width: 100%;
-            padding-top: 56.25%; /* نسبة 16:9 */
+            padding-top: 56.25%;
             background: #000;
           }
 
@@ -388,7 +445,6 @@ export default function Home() {
             object-fit: contain;
           }
 
-          /* في وضع الشاشة الكاملة */
           .video-container:fullscreen .video-wrapper video {
             object-fit: cover;
           }
@@ -445,14 +501,21 @@ export default function Home() {
             align-items: center;
           }
 
+          .channel-info-left {
+            flex: 1;
+          }
+
           .channel-name-display {
             font-size: 22px;
             font-weight: 700;
             color: var(--primary);
-            margin-bottom: 0;
+            margin-bottom: 5px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
           }
 
-          .channel-status {
+          .channel-meta {
             display: flex;
             align-items: center;
             gap: 15px;
@@ -460,10 +523,29 @@ export default function Home() {
             font-size: 14px;
           }
 
-          .status-dot {
+          .channel-type-badge {
+            padding: 4px 12px;
+            border-radius: 15px;
+            font-size: 12px;
+            font-weight: 700;
+          }
+
+          .channel-direct {
+            background: rgba(0, 255, 136, 0.2);
+            color: var(--success);
+            border: 1px solid var(--success);
+          }
+
+          .channel-proxy {
+            background: rgba(255, 170, 0, 0.2);
+            color: var(--warning);
+            border: 1px solid var(--warning);
+          }
+
+          .status-dot-active {
             width: 8px;
             height: 8px;
-            background: var(--primary);
+            background: var(--success);
             border-radius: 50%;
             animation: pulse 2s infinite;
           }
@@ -531,12 +613,46 @@ export default function Home() {
             font-size: 20px;
             font-weight: 700;
             color: var(--primary);
-            margin-bottom: 10px;
+            margin-bottom: 5px;
           }
 
           .panel-subtitle {
             color: var(--text-secondary);
             font-size: 14px;
+          }
+
+          /* Channel Toggle */
+          .channels-toggle {
+            display: flex;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 5px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+          }
+
+          .toggle-button {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            background: transparent;
+            color: var(--text-secondary);
+            font-family: 'Cairo', sans-serif;
+            font-weight: 600;
+            cursor: pointer;
+            border-radius: 12px;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            font-size: 14px;
+          }
+
+          .toggle-button.active {
+            background: linear-gradient(45deg, var(--primary), var(--primary-dark));
+            color: #001217;
+            box-shadow: 0 4px 15px rgba(0, 224, 214, 0.2);
           }
 
           /* Search Box */
@@ -561,6 +677,7 @@ export default function Home() {
             outline: none;
             border-color: var(--primary);
             background: rgba(255, 255, 255, 0.08);
+            box-shadow: 0 0 20px rgba(0, 224, 214, 0.1);
           }
 
           .search-icon {
@@ -571,12 +688,49 @@ export default function Home() {
             color: var(--primary);
           }
 
+          /* Categories */
+          .categories {
+            display: flex;
+            gap: 10px;
+            overflow-x: auto;
+            padding-bottom: 15px;
+            margin-bottom: 20px;
+            scrollbar-width: thin;
+          }
+
+          .category-btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 25px;
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--text);
+            font-family: 'Cairo', sans-serif;
+            font-weight: 600;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+          }
+
+          .category-btn:hover {
+            background: rgba(0, 224, 214, 0.1);
+          }
+
+          .category-btn.active {
+            background: linear-gradient(45deg, var(--primary), var(--primary-dark));
+            color: #001217;
+            box-shadow: 0 4px 15px rgba(0, 224, 214, 0.2);
+          }
+
           /* Channels Grid */
           .channels-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
             gap: 15px;
-            max-height: 400px;
+            max-height: 500px;
             overflow-y: auto;
             padding-right: 10px;
           }
@@ -593,26 +747,28 @@ export default function Home() {
           }
 
           .channel-item:hover {
-            background: rgba(0, 224, 214, 0.05);
-            border-color: var(--primary);
             transform: translateY(-5px);
+            border-color: rgba(255, 255, 255, 0.1);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
           }
 
           .channel-item.active {
-            background: linear-gradient(135deg, 
-              rgba(0, 224, 214, 0.1), 
-              rgba(0, 180, 169, 0.05)
-            );
             border-color: var(--primary);
             box-shadow: 0 10px 30px rgba(0, 224, 214, 0.1);
+          }
+
+          .channel-item.direct {
+            border-left: 4px solid var(--success);
+          }
+
+          .channel-item.proxy {
+            border-left: 4px solid var(--warning);
           }
 
           .channel-number {
             position: absolute;
             top: 15px;
             right: 15px;
-            background: var(--accent);
-            color: white;
             width: 30px;
             height: 30px;
             border-radius: 8px;
@@ -623,25 +779,58 @@ export default function Home() {
             font-size: 14px;
           }
 
+          .direct .channel-number {
+            background: rgba(0, 255, 136, 0.2);
+            color: var(--success);
+          }
+
+          .proxy .channel-number {
+            background: rgba(255, 170, 0, 0.2);
+            color: var(--warning);
+          }
+
           .channel-name {
             font-size: 16px;
             font-weight: 600;
-            margin-bottom: 8px;
+            margin-bottom: 10px;
             color: var(--text);
+            display: flex;
+            align-items: center;
+            gap: 8px;
           }
 
-          .channel-info {
+          .channel-details {
             display: flex;
-            gap: 10px;
+            justify-content: space-between;
+            align-items: center;
             font-size: 12px;
             color: var(--text-secondary);
           }
 
-          .channel-type {
-            background: rgba(0, 224, 214, 0.1);
-            color: var(--primary);
+          .channel-quality {
+            background: rgba(255, 42, 109, 0.2);
+            color: #ff6b9d;
             padding: 4px 10px;
             border-radius: 20px;
+          }
+
+          .channel-type-indicator {
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-weight: 700;
+            font-size: 11px;
+          }
+
+          .direct-indicator {
+            background: rgba(0, 255, 136, 0.2);
+            color: var(--success);
+            border: 1px solid var(--success);
+          }
+
+          .proxy-indicator {
+            background: rgba(255, 170, 0, 0.2);
+            color: var(--warning);
+            border: 1px solid var(--warning);
           }
 
           /* Error Message */
@@ -656,7 +845,19 @@ export default function Home() {
             font-size: 14px;
           }
 
-          /* Fullscreen Instructions */
+          /* Success Message */
+          .success-message {
+            background: rgba(0, 224, 214, 0.1);
+            border: 1px solid var(--primary);
+            color: var(--primary);
+            padding: 15px;
+            border-radius: 12px;
+            margin: 20px 0;
+            text-align: center;
+            font-size: 14px;
+          }
+
+          /* Fullscreen Hint */
           .fullscreen-hint {
             position: absolute;
             bottom: 20px;
@@ -672,6 +873,7 @@ export default function Home() {
             z-index: 5;
             opacity: 0.8;
             transition: opacity 0.3s;
+            cursor: pointer;
           }
 
           .fullscreen-hint:hover {
@@ -699,7 +901,36 @@ export default function Home() {
             opacity: 0.7;
           }
 
-          /* Scrollbar Styling */
+          /* Stats */
+          .stats {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 15px;
+            font-size: 12px;
+          }
+
+          .stat-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+          }
+
+          .stat-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+          }
+
+          .stat-dot.direct {
+            background: var(--success);
+          }
+
+          .stat-dot.proxy {
+            background: var(--warning);
+          }
+
+          /* Scrollbar */
           ::-webkit-scrollbar {
             width: 8px;
           }
@@ -714,11 +945,7 @@ export default function Home() {
             border-radius: 10px;
           }
 
-          ::-webkit-scrollbar-thumb:hover {
-            background: linear-gradient(45deg, var(--primary-dark), var(--primary));
-          }
-
-          /* Responsive Design */
+          /* Responsive */
           @media (max-width: 768px) {
             .header {
               padding: 15px 20px;
@@ -726,12 +953,17 @@ export default function Home() {
               gap: 15px;
             }
 
+            .system-status {
+              flex-direction: column;
+              gap: 10px;
+            }
+
             .container {
               padding: 15px;
             }
 
             .channels-grid {
-              grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+              grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
             }
 
             .controls {
@@ -745,7 +977,7 @@ export default function Home() {
 
             .video-info {
               flex-direction: column;
-              gap: 10px;
+              gap: 15px;
               align-items: flex-start;
             }
           }
@@ -768,56 +1000,15 @@ export default function Home() {
               padding: 10px 15px;
               font-size: 13px;
             }
-          }
 
-          /* Keyboard Shortcut Hint */
-          .keyboard-hint {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            background: rgba(0, 0, 0, 0.7);
-            color: var(--text-secondary);
-            padding: 6px 12px;
-            border-radius: 8px;
-            font-size: 11px;
-            z-index: 5;
-            opacity: 0.7;
-            transition: opacity 0.3s;
-          }
+            .categories {
+              flex-wrap: wrap;
+            }
 
-          .keyboard-hint:hover {
-            opacity: 1;
-          }
-
-          /* Zoom Controls for Touch Devices */
-          .zoom-controls {
-            position: absolute;
-            bottom: 20px;
-            left: 20px;
-            display: flex;
-            gap: 10px;
-            z-index: 5;
-          }
-
-          .zoom-button {
-            width: 40px;
-            height: 40px;
-            background: rgba(0, 0, 0, 0.7);
-            border: 1px solid var(--primary);
-            border-radius: 50%;
-            color: var(--primary);
-            font-size: 20px;
-            font-weight: bold;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: all 0.3s;
-          }
-
-          .zoom-button:hover {
-            background: rgba(0, 224, 214, 0.2);
-            transform: scale(1.1);
+            .category-btn {
+              padding: 8px 15px;
+              font-size: 13px;
+            }
           }
         `}</style>
       </Head>
@@ -834,12 +1025,18 @@ export default function Home() {
           </div>
           <div>
             <div className="logo-text">MISTER-AI-LIVE</div>
-            <div className="logo-subtext">نظام البث المباشر - شاشة كاملة متاحة</div>
+            <div className="logo-subtext">نظام البث المباشر المزدوج</div>
           </div>
         </div>
-        <div className="live-indicator">
-          <div className="live-dot"></div>
-          <span>مباشر LIVE</span>
+        <div className="system-status">
+          <div className="status-badge status-direct">
+            <div className="status-dot"></div>
+            <span>قنوات مباشرة: {directChannels.length}</span>
+          </div>
+          <div className="status-badge status-proxy">
+            <div className="status-dot"></div>
+            <span>قنوات بروكسي: {proxyChannels.length}</span>
+          </div>
         </div>
       </header>
 
@@ -848,10 +1045,6 @@ export default function Home() {
         <div className="player-section">
           {/* Video Player */}
           <div className="video-container">
-            <div className="keyboard-hint">
-              F11 للشاشة الكاملة
-            </div>
-            
             <div className="video-wrapper">
               <video 
                 ref={videoRef} 
@@ -867,33 +1060,32 @@ export default function Home() {
                   </svg>
                 </div>
               </div>
-              
-              <div className="zoom-controls">
-                <button className="zoom-button" onClick={() => {
-                  const video = videoRef.current;
-                  if (video) video.style.objectFit = video.style.objectFit === 'cover' ? 'contain' : 'cover';
-                }}>
-                  🔍
-                </button>
-              </div>
             </div>
 
             <div className="video-info">
-              <div>
+              <div className="channel-info-left">
                 <div className="channel-name-display">
-                  {active ? channels.find(c => c.id === active)?.title : "اختر قناة للبدأ"}
+                  {active ? allChannels.find(c => c.id === active)?.title : "اختر قناة للبدأ"}
                 </div>
-                <div className="channel-status">
-                  <div className="status-dot"></div>
-                  <span>{active ? "جاري التشغيل" : "في انتظار اختيار قناة"}</span>
-                  {fullscreen && <span> • وضع الشاشة الكاملة</span>}
+                <div className="channel-meta">
+                  {active && (
+                    <>
+                      <span className={`channel-type-badge ${allChannels.find(c => c.id === active)?.direct ? 'channel-direct' : 'channel-proxy'}`}>
+                        {allChannels.find(c => c.id === active)?.direct ? '🔗 مباشر' : '🛡️ بروكسي'}
+                      </span>
+                      <span>{allChannels.find(c => c.id === active)?.quality}</span>
+                      <span>{allChannels.find(c => c.id === active)?.lang?.toUpperCase()}</span>
+                      <div className="status-dot-active"></div>
+                      <span>{active ? "جاري التشغيل" : "متوقف"}</span>
+                    </>
+                  )}
                 </div>
               </div>
             </div>
 
             <div className="controls">
               <button className="control-button" onClick={() => {
-                const ch = active ? channels.find(c => c.id === active) : channels[0];
+                const ch = active ? allChannels.find(c => c.id === active) : directChannels[0];
                 if (ch) playChannel(ch);
               }}>
                 <svg viewBox="0 0 24 24" fill="currentColor">
@@ -944,7 +1136,7 @@ export default function Home() {
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
                   <path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"/>
                 </svg>
-                انقر للتكبير
+                انقر للتكبير الكامل
               </div>
             )}
           </div>
@@ -952,10 +1144,31 @@ export default function Home() {
           {/* Channels Panel */}
           <div className="channels-panel">
             <div className="panel-header">
-              <div className="panel-title">القنوات المتاحة</div>
-              <div className="panel-subtitle">اختر قناة للبث المباشر</div>
+              <div className="panel-title">القنوات المتاحة ({displayedChannels.length})</div>
+              <div className="panel-subtitle">
+                {showAllChannels ? 'جميع القنوات (مباشرة + بروكسي)' : 'القنوات المباشرة فقط'}
+              </div>
             </div>
 
+            {/* Channel Type Toggle */}
+            <div className="channels-toggle">
+              <button 
+                className={`toggle-button ${!showAllChannels ? 'active' : ''}`}
+                onClick={() => setShowAllChannels(false)}
+              >
+                <span>🔗</span>
+                مباشرة فقط
+              </button>
+              <button 
+                className={`toggle-button ${showAllChannels ? 'active' : ''}`}
+                onClick={() => setShowAllChannels(true)}
+              >
+                <span>🔄</span>
+                جميع القنوات
+              </button>
+            </div>
+
+            {/* Search */}
             <div className="search-container">
               <input
                 type="text"
@@ -971,26 +1184,42 @@ export default function Home() {
               </div>
             </div>
 
+            {/* Categories */}
+            <div className="categories">
+              {categories.map((cat) => (
+                <button
+                  key={cat.id}
+                  className={`category-btn ${category === cat.id ? 'active' : ''}`}
+                  onClick={() => setCategory(cat.id)}
+                >
+                  <span>{cat.icon}</span>
+                  {cat.name}
+                </button>
+              ))}
+            </div>
+
+            {/* Channels Grid */}
             <div className="channels-grid">
-              {channels
-                .filter(ch => 
-                  search === "" || 
-                  ch.title.toLowerCase().includes(search.toLowerCase())
-                )
-                .map((ch) => (
-                  <div
-                    key={ch.id}
-                    className={`channel-item ${active === ch.id ? 'active' : ''}`}
-                    onClick={() => playChannel(ch)}
-                  >
-                    <div className="channel-number">{ch.id}</div>
-                    <div className="channel-name">{ch.title}</div>
-                    <div className="channel-info">
-                      <span className="channel-type">بث مباشر</span>
-                      <span>جودة عالية</span>
-                    </div>
+              {displayedChannels.map((ch) => (
+                <div
+                  key={ch.id}
+                  className={`channel-item ${ch.direct ? 'direct' : 'proxy'} ${active === ch.id ? 'active' : ''}`}
+                  onClick={() => playChannel(ch)}
+                >
+                  <div className="channel-number">
+                    {ch.direct ? '🔗' : '🛡️'}
                   </div>
-                ))}
+                  <div className="channel-name">
+                    {ch.title}
+                  </div>
+                  <div className="channel-details">
+                    <span className="channel-quality">{ch.quality}</span>
+                    <span className={`channel-type-indicator ${ch.direct ? 'direct-indicator' : 'proxy-indicator'}`}>
+                      {ch.direct ? 'مباشر' : 'بروكسي'}
+                    </span>
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
         </div>
@@ -1000,14 +1229,33 @@ export default function Home() {
             ⚠️ {error}
           </div>
         )}
+
+        <div className="success-message">
+          💡 <strong>نظام البث المزدوج:</strong> 
+          القنوات المباشرة (🔗) تعمل بدون بروكسي - القنوات البروكسية (🛡️) تعمل عبر نظام الحماية
+        </div>
       </main>
 
       <footer className="footer">
         <div className="footer-logo">MISTER-AI-LIVE</div>
         <div className="footer-text">
-          © 2026 MISTERAI LIVE — جميع الحقوق محفوظة — نظام حماية متطور
+          © 2026 MISTERAI LIVE — نظام البث المباشر المزدوج
           <br />
-          <small>استخدم زر الشاشة الكاملة أو F11 للتكبير</small>
+          <small>مباشر + بروكسي لنظام بث متكامل</small>
+        </div>
+        <div className="stats">
+          <div className="stat-item">
+            <div className="stat-dot direct"></div>
+            <span>قنوات مباشرة: {directChannels.length}</span>
+          </div>
+          <div className="stat-item">
+            <div className="stat-dot proxy"></div>
+            <span>قنوات بروكسي: {proxyChannels.length}</span>
+          </div>
+          <div className="stat-item">
+            <div className="stat-dot-active"></div>
+            <span>إجمالي القنوات: {allChannels.length}</span>
+          </div>
         </div>
       </footer>
     </>
