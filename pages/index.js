@@ -7,7 +7,7 @@ export default function Home() {
   const [active, setActive] = useState(null);
   const [muted, setMuted] = useState(false);
 
-  // روابطك الأصلية 100% كما هي في ملفك index.js
+  // القنوات الأصلية كما هي في ملفك index.js وبدون أي تغيير في الروابط
   const channels = [
     { id: "1", title: "|CAN|AR beIN SPORTS Max 1 ❹Ⓚ", url: "http://fr.ottv.pro/live/4476647188407159/4476647188407159/432904.m3u8" },
     { id: "2", title: "|CAN|AR beIN SPORTS Max 1 ⒻⒽⒹ", url: "http://fr.ottv.pro/live/4476647188407159/4476647188407159/432903.m3u8" },
@@ -39,18 +39,12 @@ export default function Home() {
     { id: "28", title: "|DZ| A3 ALGERIE", url: "http://fr.ottv.pro/live/4476647188407159/4476647188407159/1675.m3u8" }
   ];
 
-  // Logic التشغيل الأصلي الخاص بك بدون أي تعديل
-  useEffect(() => {
-    const s = document.createElement("script");
-    s.src = "https://cdn.jsdelivr.net/npm/hls.js@latest";
-    s.async = true;
-    document.body.appendChild(s);
-  }, []);
-
+  // دالة تشغيل الفيديو الأصلية التي جعلتها أنت تعمل
   function playChannel(ch) {
     setActive(ch.id);
     const video = videoRef.current;
     if (!video) return;
+
     if (video.canPlayType("application/vnd.apple.mpegurl")) {
       video.src = ch.url;
       video.play();
@@ -64,71 +58,70 @@ export default function Home() {
     }
   }
 
+  useEffect(() => {
+    const s = document.createElement("script");
+    s.src = "https://cdn.jsdelivr.net/npm/hls.js@latest";
+    s.async = true;
+    document.body.appendChild(s);
+  }, []);
+
   return (
-    <div className="min-h-screen bg-[#080808] text-white font-sans">
+    <div className="container">
       <Head>
-        <title>MISTER-AI LIVE — PREMIUM UI</title>
+        <title>𝐌𝐈𝐒𝐓𝐄𝐑-𝐀𝐈-𝐋𝐈𝐕𝐄 | Premium</title>
         <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap" rel="stylesheet" />
         <style>{`
-          body { margin: 0; font-family: 'Cairo', sans-serif; background: #080808; }
-          .header { background: rgba(0,0,0,0.8); backdrop-filter: blur(10px); padding: 20px 40px; border-bottom: 1px solid #1a1a1a; display: flex; justify-content: space-between; align-items: center; }
-          .logo { font-size: 24px; font-weight: 900; color: #00e0d6; text-shadow: 0 0 15px rgba(0,224,214,0.4); }
+          :root { --accent: #00e0d6; --bg: #050505; }
+          body { margin: 0; background: var(--bg); color: white; font-family: 'Cairo', sans-serif; }
+          .container { max-width: 1200px; margin: 0 auto; padding: 20px; text-align: center; }
           
-          .main-container { max-width: 1100px; margin: 30px auto; padding: 0 20px; }
+          .header { padding: 20px 0; border-bottom: 1px solid #1a1a1a; margin-bottom: 30px; }
+          .logo { font-size: 28px; font-weight: 900; color: var(--accent); text-shadow: 0 0 10px rgba(0,224,214,0.3); letter-spacing: 2px; }
           
-          .player-wrapper { 
-            background: #000; border-radius: 20px; overflow: hidden; 
-            border: 1px solid #222; box-shadow: 0 20px 50px rgba(0,0,0,0.5);
-            position: relative;
+          .player-section { 
+            background: #000; border: 1px solid #222; border-radius: 20px; 
+            overflow: hidden; box-shadow: 0 20px 50px rgba(0,0,0,0.5); 
+            margin-bottom: 30px; position: relative;
           }
           video { width: 100%; aspect-ratio: 16/9; display: block; }
 
-          .grid-container { margin-top: 40px; }
-          .section-label { color: #555; font-size: 12px; font-weight: 900; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 20px; display: block; }
-          
+          .grid-title { text-align: left; font-size: 14px; opacity: 0.5; text-transform: uppercase; margin-bottom: 15px; letter-spacing: 1px; }
           .channels-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 12px; }
           
           .channel-btn {
-            background: #111; border: 1px solid #222; color: #777; padding: 15px; 
-            border-radius: 12px; cursor: pointer; transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            font-weight: bold; font-size: 13px; text-align: center;
+            background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05);
+            color: #888; padding: 15px; border-radius: 12px; cursor: pointer;
+            transition: 0.3s; font-weight: bold; font-size: 13px;
           }
-          .channel-btn:hover { background: #1a1a1a; border-color: #00e0d6; color: #fff; transform: translateY(-3px); }
-          .channel-btn.active { background: #00e0d6; color: #000; border-color: #00e0d6; box-shadow: 0 0 20px rgba(0,224,214,0.3); }
+          .channel-btn:hover { background: rgba(255,255,255,0.08); border-color: var(--accent); color: white; transform: translateY(-3px); }
+          .channel-btn.active { background: var(--accent); color: black; border-color: var(--accent); box-shadow: 0 0 15px var(--accent); }
 
-          .footer { padding: 40px; text-align: center; opacity: 0.2; font-size: 10px; border-top: 1px solid #111; margin-top: 50px; }
+          .footer { margin-top: 50px; padding: 20px; opacity: 0.2; font-size: 10px; border-top: 1px solid #111; }
         `}</style>
       </Head>
 
       <div className="header">
         <div className="logo">𝐌𝐈𝐒𝐓𝐄𝐑-𝐀𝐈-𝐋𝐈𝐕𝐄</div>
-        <div style={{ fontSize: '10px', background: '#111', padding: '5px 12px', borderRadius: '20px', border: '1px solid #333' }}>SERVER: ONLINE</div>
       </div>
 
-      <div className="main-container">
-        <div className="player-wrapper">
-          <video ref={videoRef} controls autoPlay />
-        </div>
-
-        <div className="grid-container">
-          <span className="section-label">Available Channels</span>
-          <div className="channels-grid">
-            {channels.map((ch) => (
-              <button
-                key={ch.id}
-                className={`channel-btn ${active === ch.id ? 'active' : ''}`}
-                onClick={() => playChannel(ch)}
-              >
-                {ch.title}
-              </button>
-            ))}
-          </div>
-        </div>
+      <div className="player-section">
+        <video ref={videoRef} controls autoPlay />
       </div>
 
-      <div className="footer">
-        MUSTAPHA PRESETS — © 2026
+      <div className="grid-title">قائمة القنوات المميزة</div>
+      <div className="channels-grid">
+        {channels.map((ch) => (
+          <button 
+            key={ch.id} 
+            className={`channel-btn ${active === ch.id ? 'active' : ''}`}
+            onClick={() => playChannel(ch)}
+          >
+            {ch.title}
+          </button>
+        ))}
       </div>
+
+      <div className="footer">DESIGNED BY MUSTAPHA — ALL RIGHTS RESERVED</div>
     </div>
   );
 }
