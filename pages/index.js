@@ -11,117 +11,530 @@ export default function Home() {
   const [fullscreen, setFullscreen] = useState(false);
   const [showAllChannels, setShowAllChannels] = useState(false);
 
-  // 🔥 قنوات خارجية تفتح في صفحة جديدة (بدون بروكسي)
+  // 🔴 القنوات الخارجية (تفتح في نافذة جديدة) - ottv.pro
   const externalChannels = [
-    // قنوات رياضية خارجية (تفتح في نافذة جديدة)
+    // beIN SPORTS Max 1 - جودات مختلفة
     { 
-      id: "external1", 
-      title: "⚽ beIN Sports 1 (External)", 
+      id: "ext1", 
+      title: "📡 beIN SPORTS Max 1 4K", 
+      category: "sports", 
+      quality: "4K", 
+      lang: "ar", 
+      country: "CA",
+      type: "external",
+      url: "http://fr.ottv.pro/live/4476647188407159/4476647188407159/432904.m3u8",
+      color: "#FF0000"
+    },
+    { 
+      id: "ext2", 
+      title: "📡 beIN SPORTS Max 1 FHD", 
+      category: "sports", 
+      quality: "FHD", 
+      lang: "ar", 
+      country: "CA",
+      type: "external",
+      url: "http://fr.ottv.pro/live/4476647188407159/4476647188407159/432903.m3u8",
+      color: "#FF4500"
+    },
+    { 
+      id: "ext3", 
+      title: "📡 beIN SPORTS Max 1 HD", 
       category: "sports", 
       quality: "HD", 
       lang: "ar", 
+      country: "CA",
       type: "external",
-      externalUrl: "https://live.hibridsports.com/bein-sports-1-arabic-live-stream/",
-      color: "#FF6B35"
+      url: "http://fr.ottv.pro/live/4476647188407159/4476647188407159/432902.m3u8",
+      color: "#FF6347"
     },
     { 
-      id: "external2", 
-      title: "⚽ beIN Sports 2 (External)", 
+      id: "ext4", 
+      title: "📡 beIN SPORTS Max 1 SD", 
       category: "sports", 
-      quality: "HD", 
+      quality: "SD", 
       lang: "ar", 
+      country: "CA",
       type: "external",
-      externalUrl: "https://live.hibridsports.com/bein-sports-2-arabic-live-stream/",
-      color: "#00A8E8"
-    },
-    { 
-      id: "external3", 
-      title: "⚽ beIN Sports 3 (External)", 
-      category: "sports", 
-      quality: "HD", 
-      lang: "en", 
-      type: "external",
-      externalUrl: "https://live.hibridsports.com/bein-sports-3-english-live-stream/",
-      color: "#6A0572"
-    },
-    { 
-      id: "external4", 
-      title: "⚽ beIN Sports 4 (External)", 
-      category: "sports", 
-      quality: "HD", 
-      lang: "fr", 
-      type: "external",
-      externalUrl: "https://live.hibridsports.com/bein-sports-4-french-live-stream/",
-      color: "#FFD166"
+      url: "http://fr.ottv.pro/live/4476647188407159/4476647188407159/432901.m3u8",
+      color: "#FF7F50"
     },
 
-    // قنوات جزائرية خارجية (تفتح في نافذة جديدة)
+    // beIN SPORTS Max 2 - جودات مختلفة
     { 
-      id: "external5", 
-      title: "🇩🇿 Canal Algérie (External)", 
-      category: "national", 
-      quality: "HD", 
+      id: "ext5", 
+      title: "📡 beIN SPORTS Max 2 4K", 
+      category: "sports", 
+      quality: "4K", 
       lang: "ar", 
+      country: "CA",
       type: "external",
-      externalUrl: "https://www.algeriainfo.com/canal-algerie-en-direct/",
-      color: "#006400"
+      url: "http://fr.ottv.pro/live/4476647188407159/4476647188407159/432900.m3u8",
+      color: "#DC143C"
     },
     { 
-      id: "external6", 
-      title: "🇩🇿 Algerie 24 (External)", 
-      category: "national", 
+      id: "ext6", 
+      title: "📡 beIN SPORTS Max 2 FHD", 
+      category: "sports", 
+      quality: "FHD", 
+      lang: "ar", 
+      country: "CA",
+      type: "external",
+      url: "http://fr.ottv.pro/live/4476647188407159/4476647188407159/432899.m3u8",
+      color: "#B22222"
+    },
+    { 
+      id: "ext7", 
+      title: "📡 beIN SPORTS Max 2 HD", 
+      category: "sports", 
       quality: "HD", 
       lang: "ar", 
+      country: "CA",
       type: "external",
-      externalUrl: "https://www.algeriainfo.com/algerie-24-en-direct/",
+      url: "http://fr.ottv.pro/live/4476647188407159/4476647188407159/432898.m3u8",
       color: "#8B0000"
     },
     { 
-      id: "external7", 
-      title: "🇩🇿 El Bilad TV (External)", 
-      category: "national", 
-      quality: "HD", 
+      id: "ext8", 
+      title: "📡 beIN SPORTS Max 2 SD", 
+      category: "sports", 
+      quality: "SD", 
       lang: "ar", 
+      country: "CA",
       type: "external",
-      externalUrl: "https://www.elbilad.net/live",
-      color: "#4682B4"
-    },
-    { 
-      id: "external8", 
-      title: "🇩🇿 A3 Algerie (External)", 
-      category: "national", 
-      quality: "HD", 
-      lang: "ar", 
-      type: "external",
-      externalUrl: "https://www.a3algerie.com/live",
-      color: "#800080"
+      url: "http://fr.ottv.pro/live/4476647188407159/4476647188407159/432897.m3u8",
+      color: "#800000"
     },
 
-    // قنوات أفلام خارجية
+    // beIN SPORTS Max 3 (EN) - جودات مختلفة
     { 
-      id: "external9", 
-      title: "🎬 Rakuten Movies (External)", 
-      category: "movies", 
-      quality: "FHD", 
+      id: "ext9", 
+      title: "📡 beIN SPORTS Max 3 4K (EN)", 
+      category: "sports", 
+      quality: "4K", 
       lang: "en", 
+      country: "CA",
       type: "external",
-      externalUrl: "https://rakuten.tv/live",
-      color: "#FF1493"
+      url: "http://fr.ottv.pro/live/4476647188407159/4476647188407159/432896.m3u8",
+      color: "#006400"
     },
     { 
-      id: "external10", 
-      title: "🎬 Pluto TV (External)", 
-      category: "movies", 
+      id: "ext10", 
+      title: "📡 beIN SPORTS Max 3 FHD (EN)", 
+      category: "sports", 
+      quality: "FHD", 
+      lang: "en", 
+      country: "CA",
+      type: "external",
+      url: "http://fr.ottv.pro/live/4476647188407159/4476647188407159/432895.m3u8",
+      color: "#228B22"
+    },
+    { 
+      id: "ext11", 
+      title: "📡 beIN SPORTS Max 3 HD (EN)", 
+      category: "sports", 
       quality: "HD", 
       lang: "en", 
+      country: "CA",
       type: "external",
-      externalUrl: "https://pluto.tv/live-tv",
-      color: "#00CED1"
+      url: "http://fr.ottv.pro/live/4476647188407159/4476647188407159/432894.m3u8",
+      color: "#32CD32"
+    },
+
+    // beIN SPORTS Max 4 (FR) - جودات مختلفة
+    { 
+      id: "ext12", 
+      title: "📡 beIN SPORTS Max 4 4K (FR)", 
+      category: "sports", 
+      quality: "4K", 
+      lang: "fr", 
+      country: "CA",
+      type: "external",
+      url: "http://fr.ottv.pro/live/4476647188407159/4476647188407159/432892.m3u8",
+      color: "#000080"
+    },
+    { 
+      id: "ext13", 
+      title: "📡 beIN SPORTS Max 4 FHD (FR)", 
+      category: "sports", 
+      quality: "FHD", 
+      lang: "fr", 
+      country: "CA",
+      type: "external",
+      url: "http://fr.ottv.pro/live/4476647188407159/4476647188407159/432891.m3u8",
+      color: "#0000CD"
+    },
+    { 
+      id: "ext14", 
+      title: "📡 beIN SPORTS Max 4 HD (FR)", 
+      category: "sports", 
+      quality: "HD", 
+      lang: "fr", 
+      country: "CA",
+      type: "external",
+      url: "http://fr.ottv.pro/live/4476647188407159/4476647188407159/432890.m3u8",
+      color: "#4169E1"
+    },
+    { 
+      id: "ext15", 
+      title: "📡 beIN SPORTS Max 4 SD (FR)", 
+      category: "sports", 
+      quality: "SD", 
+      lang: "fr", 
+      country: "CA",
+      type: "external",
+      url: "http://fr.ottv.pro/live/4476647188407159/4476647188407159/432889.m3u8",
+      color: "#6495ED"
+    },
+
+    // قنوات جزائرية خارجية
+    { 
+      id: "ext16", 
+      title: "🇩🇿 PROGRAMME NATIONAL ALGÉRIE HD", 
+      category: "national", 
+      quality: "HD", 
+      lang: "ar", 
+      country: "DZ",
+      type: "external",
+      url: "http://fr.ottv.pro/live/4476647188407159/4476647188407159/432888.m3u8",
+      color: "#008000"
+    },
+    { 
+      id: "ext17", 
+      title: "🇩🇿 EL BILAD TV", 
+      category: "national", 
+      quality: "HD", 
+      lang: "ar", 
+      country: "DZ",
+      type: "external",
+      url: "http://fr.ottv.pro/live/4476647188407159/4476647188407159/351100.m3u8",
+      color: "#006400"
+    },
+    { 
+      id: "ext18", 
+      title: "🇩🇿 ALGERIE 6", 
+      category: "national", 
+      quality: "HD", 
+      lang: "ar", 
+      country: "DZ",
+      type: "external",
+      url: "http://fr.ottv.pro/live/4476647188407159/4476647188407159/327314.m3u8",
+      color: "#228B22"
+    },
+    { 
+      id: "ext19", 
+      title: "🇩🇿 ALGERIE 8", 
+      category: "national", 
+      quality: "HD", 
+      lang: "ar", 
+      country: "DZ",
+      type: "external",
+      url: "http://fr.ottv.pro/live/4476647188407159/4476647188407159/295979.m3u8",
+      color: "#32CD32"
+    },
+    { 
+      id: "ext20", 
+      title: "🇩🇿 AL 24 NEWS", 
+      category: "news", 
+      quality: "HD", 
+      lang: "ar", 
+      country: "DZ",
+      type: "external",
+      url: "http://fr.ottv.pro/live/4476647188407159/4476647188407159/295221.m3u8",
+      color: "#ADFF2F"
+    },
+    { 
+      id: "ext21", 
+      title: "🇩🇿 ALGERIE 7", 
+      category: "national", 
+      quality: "HD", 
+      lang: "ar", 
+      country: "DZ",
+      type: "external",
+      url: "http://fr.ottv.pro/live/4476647188407159/4476647188407159/152921.m3u8",
+      color: "#7CFC00"
+    },
+    { 
+      id: "ext22", 
+      title: "🇩🇿 CANAL ALGERIE", 
+      category: "national", 
+      quality: "HD", 
+      lang: "ar", 
+      country: "DZ",
+      type: "external",
+      url: "http://fr.ottv.pro/live/4476647188407159/4476647188407159/1687.m3u8",
+      color: "#00FF00"
+    },
+    { 
+      id: "ext23", 
+      title: "🇩🇿 A3 ALGERIE", 
+      category: "national", 
+      quality: "HD", 
+      lang: "ar", 
+      country: "DZ",
+      type: "external",
+      url: "http://fr.ottv.pro/live/4476647188407159/4476647188407159/1675.m3u8",
+      color: "#90EE90"
+    },
+
+    // قنوات كندية أخرى
+    { 
+      id: "ext24", 
+      title: "🍁 CANAL+ CAN HD", 
+      category: "entertainment", 
+      quality: "HD", 
+      lang: "fr", 
+      country: "CA",
+      type: "external",
+      url: "http://fr.ottv.pro/live/4476647188407159/4476647188407159/432884.m3u8",
+      color: "#8A2BE2"
+    },
+    { 
+      id: "ext25", 
+      title: "⚽ beIN SPORTS 1 (CA) HD", 
+      category: "sports", 
+      quality: "HD", 
+      lang: "fr", 
+      country: "CA",
+      type: "external",
+      url: "http://fr.ottv.pro/live/4476647188407159/4476647188407159/432883.m3u8",
+      color: "#9932CC"
+    },
+    { 
+      id: "ext26", 
+      title: "⚽ beIN SPORTS 2 (CA) HD", 
+      category: "sports", 
+      quality: "HD", 
+      lang: "fr", 
+      country: "CA",
+      type: "external",
+      url: "http://fr.ottv.pro/live/4476647188407159/4476647188407159/432882.m3u8",
+      color: "#9400D3"
+    },
+    { 
+      id: "ext27", 
+      title: "⚽ LALIGA+ TV (CA) HD", 
+      category: "sports", 
+      quality: "HD", 
+      lang: "es", 
+      country: "CA",
+      type: "external",
+      url: "http://fr.ottv.pro/live/4476647188407159/4476647188407159/432881.m3u8",
+      color: "#8B008B"
     },
   ];
 
-  // 🔥 قنوات مباشرة تعمل داخل الموقع (بدون بروكسي)
+  // 🟢 قنوات مباشرة تعمل داخل الموقع - Rakuten TV
   const directChannels = [
+    // Rakuten Movies - UK
+    { 
+      id: "dir1", 
+      title: "🎬 Rakuten Top Movies UK", 
+      category: "movies", 
+      quality: "FHD", 
+      lang: "en", 
+      country: "UK",
+      type: "direct",
+      url: "https://0145451975a64b35866170fd2e8fa486.mediatailor.eu-west-1.amazonaws.com/v1/master/0547f18649bd788bec7b67b746e47670f558b6b2/production-LiveChannel-5987/master.m3u8",
+      color: "#FF1493"
+    },
+    { 
+      id: "dir2", 
+      title: "🎬 Rakuten Action Movies UK", 
+      category: "movies", 
+      quality: "FHD", 
+      lang: "en", 
+      country: "UK",
+      type: "direct",
+      url: "https://54045f0c40fd442c8b06df076aaf1e85.mediatailor.eu-west-1.amazonaws.com/v1/master/0547f18649bd788bec7b67b746e47670f558b6b2/production-LiveChannel-6065/master.m3u8",
+      color: "#C71585"
+    },
+    { 
+      id: "dir3", 
+      title: "🎬 Rakuten Comedy Movies UK", 
+      category: "movies", 
+      quality: "FHD", 
+      lang: "en", 
+      country: "UK",
+      type: "direct",
+      url: "https://9be783d652cd4b099cf63e1dc134c4a3.mediatailor.eu-west-1.amazonaws.com/v1/master/0547f18649bd788bec7b67b746e47670f558b6b2/production-LiveChannel-6181/master.m3u8",
+      color: "#DB7093"
+    },
+    { 
+      id: "dir4", 
+      title: "🎬 Rakuten Drama Movies UK", 
+      category: "movies", 
+      quality: "FHD", 
+      lang: "en", 
+      country: "UK",
+      type: "direct",
+      url: "https://fee09fd665814f51b939b6d106cf5f66.mediatailor.eu-west-1.amazonaws.com/v1/master/0547f18649bd788bec7b67b746e47670f558b6b2/production-LiveChannel-6093/master.m3u8",
+      color: "#FF69B4"
+    },
+
+    // Rakuten Movies - Germany
+    { 
+      id: "dir5", 
+      title: "🎬 Rakuten Top Movies Germany", 
+      category: "movies", 
+      quality: "FHD", 
+      lang: "de", 
+      country: "DE",
+      type: "direct",
+      url: "https://cbb622b29f5d43b598991f3fa19de291.mediatailor.eu-west-1.amazonaws.com/v1/master/0547f18649bd788bec7b67b746e47670f558b6b2/production-LiveChannel-5985/master.m3u8",
+      color: "#4682B4"
+    },
+    { 
+      id: "dir6", 
+      title: "🎬 Rakuten Action Movies Germany", 
+      category: "movies", 
+      quality: "FHD", 
+      lang: "de", 
+      country: "DE",
+      type: "direct",
+      url: "https://284824cf70404fdfb6ddf9349009c710.mediatailor.eu-west-1.amazonaws.com/v1/master/0547f18649bd788bec7b67b746e47670f558b6b2/production-LiveChannel-6066/master.m3u8",
+      color: "#5F9EA0"
+    },
+    { 
+      id: "dir7", 
+      title: "🎬 Rakuten Comedy Movies Germany", 
+      category: "movies", 
+      quality: "FHD", 
+      lang: "de", 
+      country: "DE",
+      type: "direct",
+      url: "https://ecac08c9e2214375b907d6825aaf9a01.mediatailor.eu-west-1.amazonaws.com/v1/master/0547f18649bd788bec7b67b746e47670f558b6b2/production-LiveChannel-6182/master.m3u8",
+      color: "#6495ED"
+    },
+
+    // Rakuten Movies - Italy
+    { 
+      id: "dir8", 
+      title: "🎬 Rakuten Top Movies Italy", 
+      category: "movies", 
+      quality: "FHD", 
+      lang: "it", 
+      country: "IT",
+      type: "direct",
+      url: "https://f84e0b1628464fab846160df957f269e.mediatailor.eu-west-1.amazonaws.com/v1/master/0547f18649bd788bec7b67b746e47670f558b6b2/production-LiveChannel-6094/master.m3u8",
+      color: "#D2691E"
+    },
+    { 
+      id: "dir9", 
+      title: "🎬 Rakuten Action Movies Italy", 
+      category: "movies", 
+      quality: "FHD", 
+      lang: "it", 
+      country: "IT",
+      type: "direct",
+      url: "https://87f2e2e5e7624e3bad85da1ca2ed31a7.mediatailor.eu-west-1.amazonaws.com/v1/master/0547f18649bd788bec7b67b746e47670f558b6b2/production-LiveChannel-6067/master.m3u8",
+      color: "#8B4513"
+    },
+    { 
+      id: "dir10", 
+      title: "🎬 Rakuten Comedy Movies Italy", 
+      category: "movies", 
+      quality: "FHD", 
+      lang: "it", 
+      country: "IT",
+      type: "direct",
+      url: "https://b8bc6c4b9be64bd6aeb3b92aa8521ed4.mediatailor.eu-west-1.amazonaws.com/v1/master/0547f18649bd788bec7b67b746e47670f558b6b2/production-LiveChannel-6184/master.m3u8",
+      color: "#A0522D"
+    },
+
+    // Rakuten Movies - Spain
+    { 
+      id: "dir11", 
+      title: "🎬 Rakuten Top Movies Spain", 
+      category: "movies", 
+      quality: "FHD", 
+      lang: "es", 
+      country: "ES",
+      type: "direct",
+      url: "https://a7089c89d85f453d850c4a1518b43076.mediatailor.eu-west-1.amazonaws.com/v1/master/0547f18649bd788bec7b67b746e47670f558b6b2/production-LiveChannel-6092/master.m3u8",
+      color: "#B8860B"
+    },
+    { 
+      id: "dir12", 
+      title: "🎬 Rakuten Action Movies Spain", 
+      category: "movies", 
+      quality: "FHD", 
+      lang: "es", 
+      country: "ES",
+      type: "direct",
+      url: "https://a9c57ec7ec5e4b7daeacc6316a0bb404.mediatailor.eu-west-1.amazonaws.com/v1/master/0547f18649bd788bec7b67b746e47670f558b6b2/production-LiveChannel-6069/master.m3u8",
+      color: "#DAA520"
+    },
+    { 
+      id: "dir13", 
+      title: "🎬 Rakuten Comedy Movies Spain", 
+      category: "movies", 
+      quality: "FHD", 
+      lang: "es", 
+      country: "ES",
+      type: "direct",
+      url: "https://71db867f03ce4d71a29e92155f07ab87.mediatailor.eu-west-1.amazonaws.com/v1/master/0547f18649bd788bec7b67b746e47670f558b6b2/production-LiveChannel-6180/master.m3u8",
+      color: "#FFD700"
+    },
+
+    // Rakuten Movies - Finland
+    { 
+      id: "dir14", 
+      title: "🎬 Rakuten Top Movies Finland", 
+      category: "movies", 
+      quality: "FHD", 
+      lang: "fi", 
+      country: "FI",
+      type: "direct",
+      url: "https://1d1b0d4cb6ae4c31985d13221795695b.mediatailor.eu-west-1.amazonaws.com/v1/master/0547f18649bd788bec7b67b746e47670f558b6b2/production-LiveChannel-6057/master.m3u8",
+      color: "#2E8B57"
+    },
+    { 
+      id: "dir15", 
+      title: "🎬 Rakuten Action Movies Finland", 
+      category: "movies", 
+      quality: "FHD", 
+      lang: "fi", 
+      country: "FI",
+      type: "direct",
+      url: "https://bca5a421a70c46ad911efd0a4767c4bf.mediatailor.eu-west-1.amazonaws.com/v1/master/0547f18649bd788bec7b67b746e47670f558b6b2/production-LiveChannel-6075/master.m3u8",
+      color: "#3CB371"
+    },
+    { 
+      id: "dir16", 
+      title: "🎬 Rakuten Comedy Movies Finland", 
+      category: "movies", 
+      quality: "FHD", 
+      lang: "fi", 
+      country: "FI",
+      type: "direct",
+      url: "https://a300af98e00746e2acf2346f43e47bd1.mediatailor.eu-west-1.amazonaws.com/v1/master/0547f18649bd788bec7b67b746e47670f558b6b2/production-LiveChannel-6191/master.m3u8",
+      color: "#66CDAA"
+    },
+
+    // Rakuten Movies - Nordic
+    { 
+      id: "dir17", 
+      title: "🎬 Rakuten Drama Movies Finland", 
+      category: "movies", 
+      quality: "FHD", 
+      lang: "fi", 
+      country: "FI",
+      type: "direct",
+      url: "https://d7e8ee3c924d4305a0c1840fe94c5d36.mediatailor.eu-west-1.amazonaws.com/v1/master/0547f18649bd788bec7b67b746e47670f558b6b2/production-LiveChannel-6102/master.m3u8",
+      color: "#8FBC8F"
+    },
+    { 
+      id: "dir18", 
+      title: "🎬 Rakuten Nordic Films", 
+      category: "movies", 
+      quality: "FHD", 
+      lang: "no", 
+      country: "NO",
+      type: "direct",
+      url: "https://4aa9ef08b70d4b0c8f3519c5950b1930.mediatailor.eu-west-1.amazonaws.com/v1/master/0547f18649bd788bec7b67b746e47670f558b6b2/production-LiveChannel-6303/master.m3u8",
+      color: "#98FB98"
+    },
+
     // قنوات اختبار داخلية (MP4 - تعمل دائماً)
     { 
       id: "test1", 
@@ -129,9 +542,10 @@ export default function Home() {
       category: "test", 
       quality: "HD", 
       lang: "en", 
+      country: "TEST",
       type: "direct",
       url: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
-      color: "#00FF88"
+      color: "#00CED1"
     },
     { 
       id: "test2", 
@@ -139,24 +553,14 @@ export default function Home() {
       category: "test", 
       quality: "HD", 
       lang: "en", 
+      country: "TEST",
       type: "direct",
       url: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4",
-      color: "#FFAA00"
-    },
-    // قنوات HLS داخلية
-    { 
-      id: "direct1", 
-      title: "📡 HLS Test 1", 
-      category: "test", 
-      quality: "HD", 
-      lang: "en", 
-      type: "direct",
-      url: "https://bitdash-a.akamaihd.net/s/content/media/renditions/_livesim_/live_2000_400.m3u8",
-      color: "#4169E1"
+      color: "#40E0D0"
     },
   ];
 
-  // 🔥 قنوات تعمل عبر البروكسي (النظام الأصلي)
+  // 🟡 قنوات تعمل عبر البروكسي (النظام الأصلي)
   const proxyChannels = [
     { 
       id: "proxy1", 
@@ -164,6 +568,7 @@ export default function Home() {
       category: "sports", 
       quality: "HD", 
       lang: "ar", 
+      country: "PROXY",
       type: "proxy" 
     },
     { 
@@ -172,6 +577,7 @@ export default function Home() {
       category: "sports", 
       quality: "HD", 
       lang: "ar", 
+      country: "PROXY",
       type: "proxy" 
     },
     { 
@@ -180,6 +586,7 @@ export default function Home() {
       category: "sports", 
       quality: "HD", 
       lang: "ar", 
+      country: "PROXY",
       type: "proxy" 
     },
     { 
@@ -188,6 +595,7 @@ export default function Home() {
       category: "sports", 
       quality: "HD", 
       lang: "ar", 
+      country: "PROXY",
       type: "proxy" 
     },
     { 
@@ -196,6 +604,7 @@ export default function Home() {
       category: "sports", 
       quality: "HD", 
       lang: "ar", 
+      country: "PROXY",
       type: "proxy" 
     },
     { 
@@ -204,6 +613,7 @@ export default function Home() {
       category: "sports", 
       quality: "HD", 
       lang: "ar", 
+      country: "PROXY",
       type: "proxy" 
     },
     { 
@@ -212,6 +622,7 @@ export default function Home() {
       category: "sports", 
       quality: "HD", 
       lang: "ar", 
+      country: "PROXY",
       type: "proxy" 
     },
     { 
@@ -220,6 +631,7 @@ export default function Home() {
       category: "sports", 
       quality: "HD", 
       lang: "ar", 
+      country: "PROXY",
       type: "proxy" 
     },
     { 
@@ -228,6 +640,7 @@ export default function Home() {
       category: "sports", 
       quality: "HD", 
       lang: "ar", 
+      country: "PROXY",
       type: "proxy" 
     },
   ];
@@ -244,7 +657,7 @@ export default function Home() {
         const channelNum = channel.id.replace('proxy', '');
         return `/api/streams/beinsport${channelNum}_.m3u8`;
       case "external":
-        return "#"; // للقنوات الخارجية، لن نستخدمها داخلياً
+        return channel.url; // للعرض فقط، سيفتح في نافذة جديدة
       default:
         return "";
     }
@@ -256,6 +669,8 @@ export default function Home() {
     { id: "sports", name: "رياضة", icon: "⚽" },
     { id: "national", name: "وطنية", icon: "🇩🇿" },
     { id: "movies", name: "أفلام", icon: "🎬" },
+    { id: "news", name: "أخبار", icon: "📰" },
+    { id: "entertainment", name: "ترفيه", icon: "🍿" },
     { id: "test", name: "اختبار", icon: "🔧" },
   ];
 
@@ -285,10 +700,110 @@ export default function Home() {
   async function playChannel(ch) {
     if (ch.type === "external") {
       // القنوات الخارجية تفتح في نافذة جديدة
-      window.open(ch.externalUrl, '_blank', 'noopener,noreferrer,width=1200,height=700');
+      const externalWindow = window.open('', '_blank', 'width=1200,height=700,scrollbars=yes');
+      
+      // إنشاء صفحة HTML كاملة للقناة الخارجية
+      const externalPage = `
+        <!DOCTYPE html>
+        <html lang="ar" dir="rtl">
+        <head>
+          <meta charset="UTF-8">
+          <meta name="viewport" content="width=device-width, initial-scale=1.0">
+          <title>${ch.title} - MISTER-AI-LIVE</title>
+          <style>
+            body {
+              margin: 0;
+              padding: 0;
+              background: #000;
+              color: white;
+              font-family: 'Cairo', sans-serif;
+              overflow: hidden;
+            }
+            .header {
+              background: linear-gradient(45deg, #FF0000, #FF4500);
+              padding: 15px;
+              text-align: center;
+              font-weight: bold;
+              font-size: 18px;
+              box-shadow: 0 4px 20px rgba(255, 0, 0, 0.3);
+            }
+            .video-container {
+              width: 100%;
+              height: calc(100vh - 70px);
+              background: #000;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+            }
+            video {
+              width: 100%;
+              height: 100%;
+              max-height: 100%;
+              object-fit: contain;
+            }
+            .info {
+              position: absolute;
+              bottom: 20px;
+              left: 20px;
+              background: rgba(0,0,0,0.7);
+              padding: 10px 20px;
+              border-radius: 10px;
+              font-size: 14px;
+            }
+            .loading {
+              position: absolute;
+              top: 50%;
+              left: 50%;
+              transform: translate(-50%, -50%);
+              font-size: 20px;
+              color: #FF4500;
+            }
+          </style>
+          <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
+        </head>
+        <body>
+          <div class="header">
+            ${ch.title} - جودة: ${ch.quality} - ${ch.country}
+          </div>
+          <div class="video-container">
+            <div class="loading">جاري تحميل القناة الخارجية...</div>
+            <video id="externalVideo" controls autoplay playsinline>
+              <source src="${ch.url}" type="application/x-mpegURL">
+              المتصفح لا يدعم تشغيل هذا النوع من الفيديو.
+            </video>
+            <div class="info">
+              🔴 قناة خارجية - MISTER-AI-LIVE
+            </div>
+          </div>
+          <script>
+            const video = document.getElementById('externalVideo');
+            
+            // محاولة التشغيل مباشرة
+            video.play().catch(e => {
+              console.log('Auto-play blocked:', e);
+            });
+            
+            // إذا فشل التشغيل، إضافة زر تشغيل
+            setTimeout(() => {
+              if (video.paused) {
+                const playBtn = document.createElement('button');
+                playBtn.innerHTML = '🎬 انقر للتشغيل';
+                playBtn.style.cssText = 'position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);padding:15px 30px;background:#FF4500;color:white;border:none;border-radius:10px;font-size:18px;cursor:pointer;';
+                playBtn.onclick = () => video.play();
+                document.querySelector('.video-container').appendChild(playBtn);
+              }
+            }, 2000);
+          <\/script>
+        </body>
+        </html>
+      `;
+      
+      externalWindow.document.write(externalPage);
+      externalWindow.document.close();
       return;
     }
 
+    // القنوات المباشرة والبروكسية تعمل داخل الموقع
     setError("");
     setActive(ch.id);
     const video = videoRef.current;
@@ -375,10 +890,41 @@ export default function Home() {
     }
   }
 
-  // دالة فتح القناة الخارجية
+  // دالة فتح القناة الخارجية فقط (بدون تشغيل داخل الموقع)
   function openExternalChannel(ch) {
-    if (ch.externalUrl) {
-      window.open(ch.externalUrl, '_blank', 'noopener,noreferrer,width=1200,height=700');
+    if (ch.type === "external") {
+      const externalWindow = window.open('', '_blank', 'width=1200,height=700,scrollbars=yes');
+      
+      const externalPage = `
+        <!DOCTYPE html>
+        <html lang="ar" dir="rtl">
+        <head>
+          <meta charset="UTF-8">
+          <meta name="viewport" content="width=device-width, initial-scale=1.0">
+          <title>${ch.title}</title>
+          <style>
+            body { margin:0; padding:0; background:#000; color:white; font-family:'Cairo',sans-serif; }
+            .header { background:linear-gradient(45deg,${ch.color},#FF8C42); padding:15px; text-align:center; font-weight:bold; font-size:18px; }
+            .video-container { width:100%; height:calc(100vh - 70px); background:#000; }
+            video { width:100%; height:100%; object-fit:contain; }
+            .info { position:absolute; bottom:20px; left:20px; background:rgba(0,0,0,0.7); padding:10px 20px; border-radius:10px; font-size:14px; }
+          </style>
+          <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
+        </head>
+        <body>
+          <div class="header">${ch.title} | ${ch.quality} | ${ch.country}</div>
+          <div class="video-container">
+            <video controls autoplay playsinline>
+              <source src="${ch.url}" type="application/x-mpegURL">
+            </video>
+            <div class="info">🔴 قناة خارجية - MISTER-AI-LIVE</div>
+          </div>
+        </body>
+        </html>
+      `;
+      
+      externalWindow.document.write(externalPage);
+      externalWindow.document.close();
     }
   }
 
@@ -452,7 +998,7 @@ export default function Home() {
   return (
     <>
       <Head>
-        <title>MISTER-AI-LIVE — نظام البث المتعدد</title>
+        <title>MISTER-AI-LIVE — نظام البث المتكامل</title>
         <meta name="viewport" content="width=device-width,initial-scale=1" />
         <meta charSet="utf-8" />
         <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;800&display=swap" rel="stylesheet" />
@@ -463,9 +1009,9 @@ export default function Home() {
             --primary: #00e0d6;
             --primary-dark: #00b4a9;
             --accent: #ff2a6d;
-            --external: #FF6B35;
-            --direct: #00FF88;
-            --proxy: #FFAA00;
+            --external: #FF4500;
+            --direct: #00FF7F;
+            --proxy: #FFD700;
             --text: #ffffff;
             --text-secondary: #b0b8d0;
           }
@@ -486,9 +1032,9 @@ export default function Home() {
 
           body {
             background: 
-              radial-gradient(circle at 20% 30%, rgba(0, 224, 214, 0.1) 0%, transparent 50%),
-              radial-gradient(circle at 80% 70%, rgba(255, 107, 53, 0.05) 0%, transparent 50%),
-              radial-gradient(circle at 40% 60%, rgba(0, 255, 136, 0.05) 0%, transparent 50%),
+              radial-gradient(circle at 20% 30%, rgba(255, 69, 0, 0.1) 0%, transparent 50%),
+              radial-gradient(circle at 80% 70%, rgba(0, 255, 127, 0.05) 0%, transparent 50%),
+              radial-gradient(circle at 40% 60%, rgba(255, 215, 0, 0.05) 0%, transparent 50%),
               linear-gradient(180deg, #0a0a1a 0%, #151530 100%);
           }
 
@@ -497,7 +1043,7 @@ export default function Home() {
             padding: 20px 40px;
             background: rgba(10, 10, 26, 0.95);
             backdrop-filter: blur(15px);
-            border-bottom: 1px solid rgba(0, 224, 214, 0.15);
+            border-bottom: 1px solid rgba(255, 69, 0, 0.15);
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -516,24 +1062,24 @@ export default function Home() {
           .logo-icon {
             width: 55px;
             height: 55px;
-            background: linear-gradient(135deg, var(--primary), var(--external), var(--direct));
+            background: linear-gradient(135deg, var(--external), var(--direct), var(--proxy));
             border-radius: 15px;
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 0 30px rgba(0, 224, 214, 0.4);
+            box-shadow: 0 0 30px rgba(255, 69, 0, 0.4);
             animation: glow 3s ease-in-out infinite alternate;
           }
 
           @keyframes glow {
-            from { box-shadow: 0 0 20px rgba(0, 224, 214, 0.4); }
-            to { box-shadow: 0 0 40px rgba(255, 107, 53, 0.6); }
+            from { box-shadow: 0 0 20px rgba(255, 69, 0, 0.4); }
+            to { box-shadow: 0 0 40px rgba(0, 255, 127, 0.6); }
           }
 
           .logo-text {
             font-size: 26px;
             font-weight: 900;
-            background: linear-gradient(45deg, var(--primary), var(--external), var(--accent));
+            background: linear-gradient(45deg, var(--external), var(--direct), var(--accent));
             -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
@@ -564,6 +1110,8 @@ export default function Home() {
             transition: all 0.3s;
             cursor: pointer;
             border: 2px solid transparent;
+            background: rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
           }
 
           .status-badge:hover {
@@ -571,21 +1119,18 @@ export default function Home() {
           }
 
           .status-external {
-            background: linear-gradient(45deg, var(--external), #FF8C42);
-            color: #001217;
-            border-color: rgba(255, 107, 53, 0.3);
+            border-color: var(--external);
+            color: var(--external);
           }
 
           .status-direct {
-            background: linear-gradient(45deg, var(--direct), #00CC6D);
-            color: #001217;
-            border-color: rgba(0, 255, 136, 0.3);
+            border-color: var(--direct);
+            color: var(--direct);
           }
 
           .status-proxy {
-            background: linear-gradient(45deg, var(--proxy), #FF9900);
-            color: #001217;
-            border-color: rgba(255, 170, 0, 0.3);
+            border-color: var(--proxy);
+            color: var(--proxy);
           }
 
           .status-dot {
@@ -603,7 +1148,7 @@ export default function Home() {
 
           /* Main Container */
           .container {
-            max-width: 1700px;
+            max-width: 1800px;
             margin: 0 auto;
             padding: 35px 25px;
           }
@@ -611,7 +1156,7 @@ export default function Home() {
           /* Video Player Section */
           .player-section {
             display: grid;
-            grid-template-columns: 2.2fr 1fr;
+            grid-template-columns: 2.5fr 1.5fr;
             gap: 35px;
             margin-bottom: 40px;
           }
@@ -643,12 +1188,6 @@ export default function Home() {
             flex-direction: column;
           }
 
-          .video-container:fullscreen .video-wrapper {
-            padding-top: 0;
-            flex: 1;
-            height: calc(100vh - 130px);
-          }
-
           .video-wrapper {
             position: relative;
             width: 100%;
@@ -663,10 +1202,6 @@ export default function Home() {
             width: 100%;
             height: 100%;
             object-fit: contain;
-          }
-
-          .video-container:fullscreen .video-wrapper video {
-            object-fit: cover;
           }
 
           .video-overlay {
@@ -708,13 +1243,6 @@ export default function Home() {
             box-shadow: 0 0 40px rgba(0, 224, 214, 0.5);
           }
 
-          .play-button svg {
-            width: 30px;
-            height: 30px;
-            fill: var(--primary);
-            margin-left: 5px;
-          }
-
           .video-info {
             padding: 25px;
             border-top: 1px solid rgba(255, 255, 255, 0.06);
@@ -754,26 +1282,20 @@ export default function Home() {
             letter-spacing: 0.5px;
             border: 2px solid;
             transition: all 0.3s;
-          }
-
-          .channel-type-badge:hover {
-            transform: scale(1.05);
+            background: rgba(0, 0, 0, 0.2);
           }
 
           .channel-external {
-            background: linear-gradient(45deg, rgba(255, 107, 53, 0.2), rgba(255, 140, 66, 0.1));
             color: var(--external);
             border-color: var(--external);
           }
 
           .channel-direct {
-            background: linear-gradient(45deg, rgba(0, 255, 136, 0.2), rgba(0, 204, 109, 0.1));
             color: var(--direct);
             border-color: var(--direct);
           }
 
           .channel-proxy {
-            background: linear-gradient(45deg, rgba(255, 170, 0, 0.2), rgba(255, 153, 0, 0.1));
             color: var(--proxy);
             border-color: var(--proxy);
           }
@@ -807,6 +1329,7 @@ export default function Home() {
             padding: 25px;
             background: rgba(0, 0, 0, 0.25);
             border-top: 1px solid rgba(255, 255, 255, 0.06);
+            flex-wrap: wrap;
           }
 
           .control-button {
@@ -824,47 +1347,41 @@ export default function Home() {
             gap: 10px;
             font-size: 15px;
             letter-spacing: 0.5px;
+            flex: 1;
+            min-width: 180px;
+            justify-content: center;
           }
 
           .control-button:hover {
-            background: rgba(0, 224, 214, 0.15);
             transform: translateY(-3px);
-            box-shadow: 0 10px 25px rgba(0, 224, 214, 0.2);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
           }
 
-          .control-button svg {
-            width: 18px;
-            height: 18px;
-          }
-
-          .control-button.fullscreen {
+          .control-button.restart {
             background: linear-gradient(45deg, var(--primary), var(--primary-dark));
             color: #001217;
-            font-weight: 800;
           }
 
-          .control-button.fullscreen:hover {
-            background: linear-gradient(45deg, var(--primary-dark), var(--primary));
-            transform: translateY(-3px) scale(1.05);
-            box-shadow: 0 15px 30px rgba(0, 224, 214, 0.3);
+          .control-button.mute {
+            background: linear-gradient(45deg, #666, #888);
+            color: white;
           }
 
           .control-button.external {
-            background: linear-gradient(45deg, var(--external), #FF8C42);
-            color: #001217;
+            background: linear-gradient(45deg, var(--external), #FF6347);
+            color: white;
             font-weight: 800;
             animation: externalGlow 2s infinite alternate;
           }
 
           @keyframes externalGlow {
-            from { box-shadow: 0 0 15px rgba(255, 107, 53, 0.5); }
-            to { box-shadow: 0 0 25px rgba(255, 107, 53, 0.8); }
+            from { box-shadow: 0 0 15px rgba(255, 69, 0, 0.5); }
+            to { box-shadow: 0 0 25px rgba(255, 69, 0, 0.8); }
           }
 
-          .control-button.external:hover {
-            background: linear-gradient(45deg, #FF8C42, var(--external));
-            transform: translateY(-3px) scale(1.05);
-            box-shadow: 0 15px 35px rgba(255, 107, 53, 0.6);
+          .control-button.fullscreen {
+            background: linear-gradient(45deg, #4A4A4A, #666);
+            color: white;
           }
 
           /* Channels Panel */
@@ -874,6 +1391,10 @@ export default function Home() {
             padding: 30px;
             border: 1px solid rgba(255, 255, 255, 0.08);
             box-shadow: 0 25px 70px rgba(0, 0, 0, 0.6);
+            max-height: 90vh;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
           }
 
           .panel-header {
@@ -892,65 +1413,16 @@ export default function Home() {
             gap: 12px;
           }
 
-          .panel-title-icon {
-            font-size: 28px;
-          }
-
           .panel-subtitle {
             color: var(--text-secondary);
             font-size: 15px;
             line-height: 1.5;
           }
 
-          /* Channels Filter */
-          .channels-filter {
-            display: flex;
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 18px;
-            padding: 8px;
-            margin-bottom: 25px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            gap: 8px;
-          }
-
-          .filter-button {
-            flex: 1;
-            padding: 15px;
-            border: none;
-            background: transparent;
-            color: var(--text-secondary);
-            font-family: 'Cairo', sans-serif;
-            font-weight: 700;
-            cursor: pointer;
-            border-radius: 14px;
-            transition: all 0.3s;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            font-size: 15px;
-          }
-
-          .filter-button:hover {
-            background: rgba(255, 255, 255, 0.1);
-          }
-
-          .filter-button.active {
-            background: linear-gradient(45deg, var(--primary), var(--primary-dark));
-            color: #001217;
-            box-shadow: 0 8px 25px rgba(0, 224, 214, 0.25);
-            transform: translateY(-2px);
-          }
-
-          .filter-button.external {
-            background: linear-gradient(45deg, var(--external), #FF8C42);
-            color: #001217;
-          }
-
           /* Search Box */
           .search-container {
             position: relative;
-            margin-bottom: 25px;
+            margin-bottom: 20px;
           }
 
           .search-input {
@@ -985,15 +1457,15 @@ export default function Home() {
           /* Categories */
           .categories {
             display: flex;
-            gap: 12px;
+            gap: 8px;
             overflow-x: auto;
             padding-bottom: 20px;
-            margin-bottom: 25px;
+            margin-bottom: 20px;
             scrollbar-width: thin;
           }
 
           .category-btn {
-            padding: 12px 24px;
+            padding: 12px 20px;
             border: none;
             border-radius: 25px;
             background: rgba(255, 255, 255, 0.05);
@@ -1005,8 +1477,8 @@ export default function Home() {
             transition: all 0.3s;
             display: flex;
             align-items: center;
-            gap: 10px;
-            font-size: 15px;
+            gap: 8px;
+            font-size: 14px;
             border: 2px solid transparent;
           }
 
@@ -1023,20 +1495,25 @@ export default function Home() {
           }
 
           /* Channels Grid */
+          .channels-grid-container {
+            flex: 1;
+            overflow: hidden;
+          }
+
           .channels-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 18px;
-            max-height: 550px;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 15px;
+            max-height: 500px;
             overflow-y: auto;
-            padding-right: 12px;
+            padding-right: 10px;
           }
 
           .channel-item {
             background: rgba(255, 255, 255, 0.03);
             border: 2px solid rgba(255, 255, 255, 0.05);
-            border-radius: 20px;
-            padding: 25px;
+            border-radius: 15px;
+            padding: 20px;
             cursor: pointer;
             transition: all 0.4s;
             position: relative;
@@ -1044,31 +1521,15 @@ export default function Home() {
             backdrop-filter: blur(10px);
           }
 
-          .channel-item::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 4px;
-            background: linear-gradient(90deg, var(--external), var(--direct), var(--proxy));
-            opacity: 0;
-            transition: opacity 0.3s;
-          }
-
           .channel-item:hover {
-            transform: translateY(-8px);
+            transform: translateY(-5px);
             border-color: rgba(255, 255, 255, 0.15);
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
-          }
-
-          .channel-item:hover::before {
-            opacity: 1;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
           }
 
           .channel-item.active {
             border-color: var(--primary);
-            box-shadow: 0 25px 60px rgba(0, 224, 214, 0.15);
+            box-shadow: 0 20px 40px rgba(0, 224, 214, 0.15);
             background: rgba(0, 224, 214, 0.03);
           }
 
@@ -1087,36 +1548,8 @@ export default function Home() {
           .channel-header {
             display: flex;
             justify-content: space-between;
-            align-items: flex-start;
-            margin-bottom: 15px;
-          }
-
-          .channel-number {
-            width: 40px;
-            height: 40px;
-            border-radius: 12px;
-            display: flex;
             align-items: center;
-            justify-content: center;
-            font-weight: 900;
-            font-size: 16px;
-            color: #001217;
-            flex-shrink: 0;
-          }
-
-          .external .channel-number {
-            background: linear-gradient(45deg, var(--external), #FF8C42);
-            box-shadow: 0 5px 20px rgba(255, 107, 53, 0.3);
-          }
-
-          .direct .channel-number {
-            background: linear-gradient(45deg, var(--direct), #00CC6D);
-            box-shadow: 0 5px 20px rgba(0, 255, 136, 0.3);
-          }
-
-          .proxy .channel-number {
-            background: linear-gradient(45deg, var(--proxy), #FF9900);
-            box-shadow: 0 5px 20px rgba(255, 170, 0, 0.3);
+            margin-bottom: 15px;
           }
 
           .channel-type-indicator {
@@ -1129,36 +1562,37 @@ export default function Home() {
           }
 
           .external-indicator {
-            background: rgba(255, 107, 53, 0.15);
+            background: rgba(255, 69, 0, 0.15);
             color: var(--external);
             border-color: var(--external);
           }
 
           .direct-indicator {
-            background: rgba(0, 255, 136, 0.15);
+            background: rgba(0, 255, 127, 0.15);
             color: var(--direct);
             border-color: var(--direct);
           }
 
           .proxy-indicator {
-            background: rgba(255, 170, 0, 0.15);
+            background: rgba(255, 215, 0, 0.15);
             color: var(--proxy);
             border-color: var(--proxy);
           }
 
           .channel-name {
-            font-size: 18px;
+            font-size: 16px;
             font-weight: 800;
-            margin-bottom: 12px;
+            margin-bottom: 10px;
             color: var(--text);
             line-height: 1.4;
+            min-height: 45px;
           }
 
           .channel-details {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-top: 20px;
+            margin-top: 15px;
           }
 
           .channel-quality {
@@ -1167,53 +1601,53 @@ export default function Home() {
             padding: 6px 14px;
             border-radius: 20px;
             font-weight: 700;
+            font-size: 12px;
+          }
+
+          .channel-country {
+            font-size: 11px;
+            color: var(--text-secondary);
+            background: rgba(255, 255, 255, 0.05);
+            padding: 4px 10px;
+            border-radius: 10px;
+          }
+
+          .channel-action-buttons {
+            display: flex;
+            gap: 8px;
+            margin-top: 15px;
+          }
+
+          .action-button {
+            flex: 1;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 12px;
+            font-family: 'Cairo', sans-serif;
+            font-weight: 800;
             font-size: 13px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            letter-spacing: 0.5px;
           }
 
           .external-button {
-            padding: 10px 20px;
-            background: linear-gradient(45deg, var(--external), #FF8C42);
-            color: #001217;
-            border: none;
-            border-radius: 15px;
-            font-family: 'Cairo', sans-serif;
-            font-weight: 900;
-            font-size: 14px;
-            cursor: pointer;
-            transition: all 0.3s;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            letter-spacing: 0.5px;
-          }
-
-          .external-button:hover {
-            background: linear-gradient(45deg, #FF8C42, var(--external));
-            transform: translateY(-3px);
-            box-shadow: 0 10px 25px rgba(255, 107, 53, 0.4);
+            background: linear-gradient(45deg, var(--external), #FF6347);
+            color: white;
           }
 
           .play-button-small {
-            padding: 10px 20px;
             background: linear-gradient(45deg, var(--primary), var(--primary-dark));
             color: #001217;
-            border: none;
-            border-radius: 15px;
-            font-family: 'Cairo', sans-serif;
-            font-weight: 900;
-            font-size: 14px;
-            cursor: pointer;
-            transition: all 0.3s;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            letter-spacing: 0.5px;
           }
 
-          .play-button-small:hover {
-            background: linear-gradient(45deg, var(--primary-dark), var(--primary));
+          .action-button:hover {
             transform: translateY(-3px);
-            box-shadow: 0 10px 25px rgba(0, 224, 214, 0.4);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
           }
 
           /* Error Message */
@@ -1232,7 +1666,7 @@ export default function Home() {
 
           /* Success Message */
           .success-message {
-            background: linear-gradient(45deg, rgba(0, 224, 214, 0.1), rgba(255, 107, 53, 0.05));
+            background: linear-gradient(45deg, rgba(0, 224, 214, 0.1), rgba(255, 69, 0, 0.05));
             border: 2px solid rgba(0, 224, 214, 0.3);
             color: var(--primary);
             padding: 20px;
@@ -1245,15 +1679,11 @@ export default function Home() {
             box-shadow: 0 10px 30px rgba(0, 224, 214, 0.1);
           }
 
-          .success-message strong {
-            color: var(--external);
-          }
-
           /* Stats */
           .stats {
             display: flex;
             justify-content: center;
-            gap: 35px;
+            gap: 25px;
             margin-top: 20px;
             font-size: 14px;
             flex-wrap: wrap;
@@ -1262,17 +1692,12 @@ export default function Home() {
           .stat-item {
             display: flex;
             align-items: center;
-            gap: 12px;
-            padding: 12px 20px;
+            gap: 10px;
+            padding: 10px 18px;
             background: rgba(255, 255, 255, 0.03);
             border-radius: 15px;
             border: 1px solid rgba(255, 255, 255, 0.05);
             transition: all 0.3s;
-          }
-
-          .stat-item:hover {
-            background: rgba(255, 255, 255, 0.05);
-            transform: translateY(-3px);
           }
 
           .stat-dot {
@@ -1327,7 +1752,7 @@ export default function Home() {
 
           /* Scrollbar */
           ::-webkit-scrollbar {
-            width: 10px;
+            width: 8px;
           }
 
           ::-webkit-scrollbar-track {
@@ -1340,11 +1765,13 @@ export default function Home() {
             border-radius: 10px;
           }
 
-          ::-webkit-scrollbar-thumb:hover {
-            background: linear-gradient(45deg, var(--external), var(--direct));
+          /* Responsive */
+          @media (max-width: 1400px) {
+            .channels-grid {
+              grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            }
           }
 
-          /* Responsive */
           @media (max-width: 1024px) {
             .header {
               padding: 15px 25px;
@@ -1362,22 +1789,11 @@ export default function Home() {
             }
 
             .channels-grid {
-              grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            }
-
-            .controls {
-              flex-wrap: wrap;
+              grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
             }
 
             .control-button {
-              flex: 1;
-              min-width: 140px;
-            }
-
-            .video-info {
-              flex-direction: column;
-              gap: 20px;
-              align-items: flex-start;
+              min-width: 150px;
             }
           }
 
@@ -1386,19 +1802,15 @@ export default function Home() {
               font-size: 22px;
             }
 
-            .logo-icon {
-              width: 45px;
-              height: 45px;
-            }
-
             .status-badge {
               padding: 8px 15px;
               font-size: 13px;
             }
 
             .control-button {
-              padding: 12px 20px;
+              min-width: 100%;
               font-size: 14px;
+              padding: 12px 20px;
             }
 
             .channels-grid {
@@ -1410,16 +1822,8 @@ export default function Home() {
             }
 
             .category-btn {
-              padding: 10px 20px;
-              font-size: 14px;
-            }
-
-            .stats {
-              gap: 15px;
-            }
-
-            .stat-item {
               padding: 10px 15px;
+              font-size: 13px;
             }
           }
 
@@ -1432,18 +1836,8 @@ export default function Home() {
               font-size: 20px;
             }
 
-            .logo-icon {
-              width: 40px;
-              height: 40px;
-            }
-
-            .control-button {
-              min-width: 100%;
-              justify-content: center;
-            }
-
             .channel-name {
-              font-size: 16px;
+              font-size: 14px;
             }
 
             .footer {
@@ -1465,7 +1859,7 @@ export default function Home() {
           </div>
           <div>
             <div className="logo-text">MISTER-AI-LIVE</div>
-            <div className="logo-subtext">نظام البث المتعدد - مباشر + خارجي + بروكسي</div>
+            <div className="logo-subtext">نظام البث المتكامل - خارجي + مباشر + بروكسي</div>
           </div>
         </div>
         <div className="system-status">
@@ -1473,7 +1867,7 @@ export default function Home() {
             <div className="status-dot"></div>
             <span>خارجي: {externalChannels.length}</span>
           </div>
-          <div className="status-badge status-direct" onClick={() => setCategory('test')}>
+          <div className="status-badge status-direct" onClick={() => setCategory('movies')}>
             <div className="status-dot"></div>
             <span>مباشر: {directChannels.length}</span>
           </div>
@@ -1518,11 +1912,12 @@ export default function Home() {
                         allChannels.find(c => c.id === active)?.type === 'external' ? 'channel-external' :
                         allChannels.find(c => c.id === active)?.type === 'direct' ? 'channel-direct' : 'channel-proxy'
                       }`}>
-                        {allChannels.find(c => c.id === active)?.type === 'external' ? '🌐 خارجي' :
+                        {allChannels.find(c => c.id === active)?.type === 'external' ? '📡 خارجي' :
                          allChannels.find(c => c.id === active)?.type === 'direct' ? '🔗 مباشر' : '🛡️ بروكسي'}
                       </span>
                       <span>{allChannels.find(c => c.id === active)?.quality}</span>
                       <span>{allChannels.find(c => c.id === active)?.lang?.toUpperCase()}</span>
+                      <span className="channel-country">{allChannels.find(c => c.id === active)?.country}</span>
                       <div className={`status-dot-active ${
                         allChannels.find(c => c.id === active)?.type === 'external' ? 'status-external-dot' :
                         allChannels.find(c => c.id === active)?.type === 'direct' ? 'status-direct-dot' : 'status-proxy-dot'
@@ -1535,7 +1930,7 @@ export default function Home() {
             </div>
 
             <div className="controls">
-              <button className="control-button" onClick={() => {
+              <button className="control-button restart" onClick={() => {
                 const ch = active ? allChannels.find(c => c.id === active) : directChannels[0];
                 if (ch) playChannel(ch);
               }}>
@@ -1545,7 +1940,7 @@ export default function Home() {
                 إعادة تشغيل
               </button>
 
-              <button className="control-button" onClick={toggleMute}>
+              <button className="control-button mute" onClick={toggleMute}>
                 {muted ? (
                   <>
                     <svg viewBox="0 0 24 24" fill="currentColor">
@@ -1568,7 +1963,7 @@ export default function Home() {
                 if (ch && ch.type === 'external') {
                   openExternalChannel(ch);
                 } else {
-                  // إذا لم تكن القناة خارجية، فتح أول قناة خارجية
+                  // افتح أول قناة خارجية
                   openExternalChannel(externalChannels[0]);
                 }
               }}>
@@ -1584,7 +1979,7 @@ export default function Home() {
                     <svg viewBox="0 0 24 24" fill="currentColor">
                       <path d="M5 16h3v3h2v-5H5v2zm3-8H5v2h5V5H8v3zm6 11h2v-3h3v-2h-5v5zm2-11V5h-2v5h5V8h-3z"/>
                     </svg>
-                    خروج من الشاشة الكاملة
+                    خروج
                   </>
                 ) : (
                   <>
@@ -1602,34 +1997,12 @@ export default function Home() {
           <div className="channels-panel">
             <div className="panel-header">
               <div className="panel-title">
-                <span className="panel-title-icon">📡</span>
+                <span>📡</span>
                 القنوات المتاحة ({filteredChannels.length})
               </div>
               <div className="panel-subtitle">
-                اختر قناة للبث المباشر داخل الموقع، أو افتح قناة خارجية في نافذة جديدة
+                اختر قناة: 📡 خارجية (نافذة جديدة) | 🔗 مباشرة داخل الموقع | 🛡️ عبر بروكسي
               </div>
-            </div>
-
-            {/* Channels Filter */}
-            <div className="channels-filter">
-              <button 
-                className={`filter-button ${category === 'sports' ? 'active' : ''}`}
-                onClick={() => setCategory('sports')}
-              >
-                ⚽ رياضية
-              </button>
-              <button 
-                className={`filter-button ${category === 'national' ? 'active' : ''}`}
-                onClick={() => setCategory('national')}
-              >
-                🇩🇿 جزائرية
-              </button>
-              <button 
-                className={`filter-button ${category === 'all' ? 'active' : ''}`}
-                onClick={() => setCategory('all')}
-              >
-                📺 جميع
-              </button>
             </div>
 
             {/* Search */}
@@ -1637,7 +2010,7 @@ export default function Home() {
               <input
                 type="text"
                 className="search-input"
-                placeholder="ابحث عن قناة رياضية، جزائرية، أو أفلام..."
+                placeholder="ابحث عن قناة رياضية، جزائرية، أفلام..."
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
               />
@@ -1663,63 +2036,65 @@ export default function Home() {
             </div>
 
             {/* Channels Grid */}
-            <div className="channels-grid">
-              {filteredChannels.map((ch) => (
-                <div
-                  key={ch.id}
-                  className={`channel-item ${ch.type} ${active === ch.id ? 'active' : ''}`}
-                >
-                  <div className="channel-header">
-                    <div className="channel-number">
-                      {ch.type === 'external' ? '🌐' : 
-                       ch.type === 'direct' ? '🔗' : '🛡️'}
+            <div className="channels-grid-container">
+              <div className="channels-grid">
+                {filteredChannels.map((ch) => (
+                  <div
+                    key={ch.id}
+                    className={`channel-item ${ch.type} ${active === ch.id ? 'active' : ''}`}
+                  >
+                    <div className="channel-header">
+                      <span className={`channel-type-indicator ${
+                        ch.type === 'external' ? 'external-indicator' :
+                        ch.type === 'direct' ? 'direct-indicator' : 'proxy-indicator'
+                      }`}>
+                        {ch.type === 'external' ? '📡 خارجي' : 
+                         ch.type === 'direct' ? '🔗 مباشر' : '🛡️ بروكسي'}
+                      </span>
+                      <span className="channel-country">{ch.country}</span>
                     </div>
-                    <span className={`channel-type-indicator ${
-                      ch.type === 'external' ? 'external-indicator' :
-                      ch.type === 'direct' ? 'direct-indicator' : 'proxy-indicator'
-                    }`}>
-                      {ch.type === 'external' ? 'خارجي' : 
-                       ch.type === 'direct' ? 'مباشر' : 'بروكسي'}
-                    </span>
-                  </div>
-                  
-                  <div className="channel-name">
-                    {ch.title}
-                  </div>
-                  
-                  <div className="channel-details">
-                    <span className="channel-quality">{ch.quality}</span>
                     
-                    {ch.type === 'external' ? (
-                      <button 
-                        className="external-button"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          openExternalChannel(ch);
-                        }}
-                      >
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-                          <path d="M19 19H5V5h7V3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2v-7h-2v7zM14 3v2h3.59l-9.83 9.83 1.41 1.41L19 6.41V10h2V3h-7z"/>
-                        </svg>
-                        فتح خارجياً
-                      </button>
-                    ) : (
-                      <button 
-                        className="play-button-small"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          playChannel(ch);
-                        }}
-                      >
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-                          <path d="M8 5v14l11-7z"/>
-                        </svg>
-                        تشغيل
-                      </button>
-                    )}
+                    <div className="channel-name">
+                      {ch.title}
+                    </div>
+                    
+                    <div className="channel-details">
+                      <span className="channel-quality">{ch.quality}</span>
+                      <span>{ch.lang?.toUpperCase()}</span>
+                    </div>
+                    
+                    <div className="channel-action-buttons">
+                      {ch.type === 'external' ? (
+                        <button 
+                          className="action-button external-button"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            openExternalChannel(ch);
+                          }}
+                        >
+                          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M19 19H5V5h7V3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2v-7h-2v7zM14 3v2h3.59l-9.83 9.83 1.41 1.41L19 6.41V10h2V3h-7z"/>
+                          </svg>
+                          فتح خارجياً
+                        </button>
+                      ) : (
+                        <button 
+                          className="action-button play-button-small"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            playChannel(ch);
+                          }}
+                        >
+                          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M8 5v14l11-7z"/>
+                          </svg>
+                          تشغيل داخلي
+                        </button>
+                      )}
+                    </div>
                   </div>
-                </div>
-              ))}
+                ))}
+              </div>
             </div>
           </div>
         </div>
@@ -1731,13 +2106,13 @@ export default function Home() {
         )}
 
         <div className="success-message">
-          🚀 <strong>نظام البث المتعدد:</strong> 
+          🚀 <strong>نظام البث المتكامل:</strong> 
           <br />
-          🌐 <strong>القنوات الخارجية:</strong> تفتح في نافذة جديدة (رياضية + جزائرية + أفلام)
+          📡 <strong>القنوات الخارجية (ottv.pro):</strong> {externalChannels.length} قناة - تفتح في نافذة جديدة
           <br />
-          🔗 <strong>القنوات المباشرة:</strong> تعمل داخل الموقع بدون بروكسي
+          🔗 <strong>القنوات المباشرة (Rakuten):</strong> {directChannels.length} قناة - تعمل داخل الموقع بدون بروكسي
           <br />
-          🛡️ <strong>القنوات البروكسية:</strong> تعمل داخل الموقع عبر نظام الحماية
+          🛡️ <strong>القنوات البروكسية:</strong> {proxyChannels.length} قناة - تعمل داخل الموقع عبر بروكسي
         </div>
 
         <div className="stats">
@@ -1763,11 +2138,11 @@ export default function Home() {
       <footer className="footer">
         <div className="footer-logo">MISTER-AI-LIVE</div>
         <div className="footer-text">
-          © 2026 MISTERAI LIVE — نظام البث المتعدد المتطور
+          © 2026 MISTERAI LIVE — نظام البث المتكامل المتطور
           <br />
-          <small>دمج القنوات الخارجية + المباشرة + البروكسية في نظام واحد متكامل</small>
+          <small>دمج جميع أنواع القنوات في نظام واحد متكامل</small>
           <br />
-          <small>قم بفتح القنوات الرياضية والجزائرية في نافذة خارجية بنقرة واحدة!</small>
+          <small>📡 قنوات ottv.pro تفتح خارجياً | 🔗 قنوات Rakuten تعمل مباشرة | 🛡️ قنوات البروكسي تعمل داخل النظام</small>
         </div>
       </footer>
     </>
